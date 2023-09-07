@@ -5,13 +5,11 @@ from server_updater.domain.mod_symlink_repository import ModSymlinkRepository
 
 
 class ModSymlinkAdapter(ModSymlinkRepository):
-
     def __init__(
         self,
         a3_workshop_dir: str,
         workshop_changelog_url: str,
     ):
-
         self._a3_workshop_dir = a3_workshop_dir
         self._workshop_changelog_url = workshop_changelog_url
 
@@ -26,5 +24,3 @@ class ModSymlinkAdapter(ModSymlinkRepository):
             return None
         os.symlink(real_path, link_path)
         return f"Creating symlink '{link_path}'..."
-
-
