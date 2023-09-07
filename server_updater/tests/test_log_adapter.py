@@ -4,7 +4,7 @@ from unittest.mock import patch
 from server_updater.infrastructure.adapters.logger_adapter import LoggerAdapter
 
 
-class Testlog(TestCase):
+class TestlogAdapter(TestCase):
     @patch("builtins.print")
     def test_log(self, mock_print):
         logger = LoggerAdapter()

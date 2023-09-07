@@ -1,0 +1,2 @@
+class LowerCaseModsUseCase:
+    pass

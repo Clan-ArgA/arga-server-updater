@@ -1,0 +1,2 @@
+class CreateModSymlinksUseCase:
+    pass
