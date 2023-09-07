@@ -1,10 +1,13 @@
-from server_updater.log import Log
+from server_updater.infrastructure.adapters.logger_adapter import LoggerAdapter
+from server_updater.infrastructure.wirings.steamcmd_wiring import SteamcmdWiring
 from server_updater.main import ServerUpdater
-from server_updater.steamcmd import SteamCmd
 
 
 def main() -> None:
-    server_updater = ServerUpdater(logger=Log(), steamcmd=SteamCmd())
+    wiring = SteamcmdWiring()
+    server_updater = ServerUpdater(
+        logger=LoggerAdapter(), steamcmd=wiring.instantiate()
+    )
     server_updater.run()
 
 

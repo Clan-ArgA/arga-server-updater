@@ -13,14 +13,14 @@ from server_updater.config import (
     WORKSHOP_CHANGELOG_URL,
     PATTERN,
 )
-from server_updater.constants import UpdateType
-from server_updater.log import Log
-from server_updater.mods import MODS
-from server_updater.steamcmd import SteamCmd
+from server_updater.domain.constants import UpdateType
+from server_updater.domain.logger_repository import LoggerRepository
+from server_updater.domain.steam_command_repository import SteamCommandRepository
+from server_updater.infrastructure.data.mods import MODS
 
 
 class ServerUpdater:
-    def __init__(self, logger: Log, steamcmd: SteamCmd):
+    def __init__(self, logger: LoggerRepository, steamcmd: SteamCommandRepository):
         self._logger = logger
         self._steamcmd = steamcmd
 
@@ -60,11 +60,11 @@ class ServerUpdater:
         self._create_mod_symlinks()
 
     def _update_server(self) -> None:
-        self._logger.log(f"Updating A3 server ({A3_SERVER_ID})")
+        self._logger.info(f"Updating A3 server ({A3_SERVER_ID})")
         self._steamcmd.run(UpdateType.SERVER)
 
     def _create_mod_symlinks(self) -> None:
-        self._logger.log("Creating symlinks...")
+        self._logger.info("Creating symlinks...")
         for mod_name, mod_id in MODS.items():
             link_path = f"{A3_MODS_DIR}/{mod_name}"
             real_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
@@ -78,7 +78,7 @@ class ServerUpdater:
             print(f"Creating symlink '{link_path}'...")
 
     def _lower_case_mods(self) -> None:
-        self._logger.log("Converting uppercase files/folders to lowercase...")
+        self._logger.info("Converting uppercase files/folders to lowercase...")
         os.system(
             "(cd {} && find . -depth -exec rename -v 's/(.*)\/([^\/]*)/$1\/\L$2/' {{}} \;)".format(
                 A3_WORKSHOP_DIR
@@ -138,13 +138,13 @@ class ServerUpdater:
             # Keep trying until the download actually succeeded
             tries = 0
             while os.path.isdir(path) is False and tries < 10:
-                self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
+                self._logger.info(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
                 self._steamcmd.run(UpdateType.MOD)
                 # Sleep for a bit so that we can kill the script if needed
                 time.sleep(5)
                 tries += 1
 
             if tries >= 10:
-                self._logger.log(
+                self._logger.info(
                     f"!! Updating {mod_name} failed after {tries} tries !!"
                 )
