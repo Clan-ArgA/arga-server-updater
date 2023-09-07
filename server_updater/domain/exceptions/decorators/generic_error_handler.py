@@ -1,8 +1,8 @@
 import logging
 
 from server_updater.domain.exceptions.base_exceptions import (
-    UpdaterFlWarning,
-    UpdaterFlGenericError,
+    UpdaterWarning,
+    UpdaterGenericError,
     UpdaterException,
 )
 
@@ -18,7 +18,7 @@ def generic_error_handler(func):
         method_name = func.__name__
         try:
             return func(*args, **kwargs)
-        except UpdaterFlWarning as exc:
+        except UpdaterWarning as exc:
             print(f"WARNING: {exc}")
         except UpdaterException as exc:
             logger.error(
@@ -38,6 +38,6 @@ def generic_error_handler(func):
             )
             logger.error("ERROR TYPE: %s.", type(exc))
             logger.error("ERROR RAW: %s", exc)
-            raise UpdaterFlGenericError(exc) from exc
+            raise UpdaterGenericError(exc) from exc
 
     return wrapper

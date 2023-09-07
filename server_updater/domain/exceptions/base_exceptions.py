@@ -22,7 +22,7 @@ class UpdaterException(Exception):
         return self._get_message()
 
 
-class UpdaterFlGenericError(UpdaterException):
+class UpdaterGenericError(UpdaterException):
     MESSAGE = ""
 
     def __init__(
@@ -44,5 +44,5 @@ class UpdaterFlGenericError(UpdaterException):
         return {"error": f"Generic error: {self._exception_or_message}."}
 
 
-class UpdaterFlWarning(UpdaterException):
+class UpdaterWarning(UpdaterException):
     """Base class for all own warnings."""
