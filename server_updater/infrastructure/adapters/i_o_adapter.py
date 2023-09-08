@@ -15,6 +15,7 @@ class IOAdapter(IORepository):
                       D: Create mod symlinks
                       E: Lower case mods
                       Q: Quit/Log Out
+                      
                       Please enter your choice: """
         )
 
