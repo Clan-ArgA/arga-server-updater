@@ -3,8 +3,10 @@ from server_updater.domain.constants import UpdateType
 from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
-from server_updater.domain.logger_repository import LoggerRepository
-from server_updater.domain.steam_command_repository import SteamCommandRepository
+from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
+from server_updater.domain.steam_command.steam_command_repository import (
+    SteamCommandRepository,
+)
 
 
 class ServerUpdateService:

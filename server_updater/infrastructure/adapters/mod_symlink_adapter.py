@@ -1,7 +1,9 @@
 import os
 from typing import Optional
 
-from server_updater.domain.mod_symlink_repository import ModSymlinkRepository
+from server_updater.domain.mod_symlink.mod_symlink_repository import (
+    ModSymlinkRepository,
+)
 
 
 class ModSymlinkAdapter(ModSymlinkRepository):

@@ -12,7 +12,9 @@ from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
 from server_updater.domain.exceptions.steamcmd_exceptions import UpdateTypeException
-from server_updater.domain.steam_command_repository import SteamCommandRepository
+from server_updater.domain.steam_command.steam_command_repository import (
+    SteamCommandRepository,
+)
 
 
 class SteamCmd(SteamCommandRepository):

@@ -1,6 +1,8 @@
-from server_updater.domain.logger_repository import LoggerRepository
-from server_updater.domain.mod_symlink_repository import ModSymlinkRepository
-from server_updater.domain.mods_repocitory import ModRepository
+from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
+from server_updater.domain.mod_symlink.mod_symlink_repository import (
+    ModSymlinkRepository,
+)
+from server_updater.domain.mods.mods_repocitory import ModRepository
 
 
 class ModSymlinkService:

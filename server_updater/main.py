@@ -14,8 +14,10 @@ from server_updater.config import (
     PATTERN,
 )
 from server_updater.domain.constants import UpdateType
-from server_updater.domain.logger_repository import LoggerRepository
-from server_updater.domain.steam_command_repository import SteamCommandRepository
+from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
+from server_updater.domain.steam_command.steam_command_repository import (
+    SteamCommandRepository,
+)
 from server_updater.infrastructure.data.mods import MODS
 
 

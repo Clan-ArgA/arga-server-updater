@@ -1,4 +1,4 @@
-from server_updater.domain.i_o_repository import IORepository
+from server_updater.domain.miscellaneous.i_o_repository import IORepository
 
 
 class IOAdapter(IORepository):

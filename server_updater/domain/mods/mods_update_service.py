@@ -1,8 +1,8 @@
 from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
-from server_updater.domain.mods_repocitory import ModRepository
-from server_updater.domain.mods_update_repository import ModsUpdateRepository
+from server_updater.domain.mods.mods_repocitory import ModRepository
+from server_updater.domain.mods.mods_update_repository import ModsUpdateRepository
 
 
 class ModsUpdateService:

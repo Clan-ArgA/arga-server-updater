@@ -6,11 +6,13 @@ from urllib import request
 
 from server_updater.config import PATTERN
 from server_updater.domain.constants import UpdateType
-from server_updater.domain.i_o_repository import IORepository
-from server_updater.domain.logger_repository import LoggerRepository
-from server_updater.domain.mods_repocitory import ModRepository
-from server_updater.domain.mods_update_repository import ModsUpdateRepository
-from server_updater.domain.steam_command_repository import SteamCommandRepository
+from server_updater.domain.miscellaneous.i_o_repository import IORepository
+from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
+from server_updater.domain.mods.mods_repocitory import ModRepository
+from server_updater.domain.mods.mods_update_repository import ModsUpdateRepository
+from server_updater.domain.steam_command.steam_command_repository import (
+    SteamCommandRepository,
+)
 
 
 class ModsUpdateAdapter(ModsUpdateRepository):
@@ -19,14 +21,12 @@ class ModsUpdateAdapter(ModsUpdateRepository):
         logger: LoggerRepository,
         steamcmd: SteamCommandRepository,
         mods: ModRepository,
-        input_output: IORepository,
         a3_workshop_dir: str,
         workshop_changelog_url: str,
     ):
         self._logger = logger
         self._steamcmd = steamcmd
         self._mods = mods
-        self._input_output = input_output
         self._a3_workshop_dir = a3_workshop_dir
         self._workshop_changelog_url = workshop_changelog_url
 

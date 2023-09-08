@@ -1,4 +1,4 @@
-from server_updater.domain.logger_repository import LoggerRepository
+from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
 
 
 class LoggerAdapter(LoggerRepository):
