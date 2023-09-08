@@ -14,6 +14,9 @@ class IOAdapter(IORepository):
                       C: Update Server only
                       D: Create mod symlinks
                       E: Lower case mods
+                      F: Copy mods sign key files
+                      G: Update compatibilities (Not implemented)
+                      H: Copy cba_settings_userconfig.pbo (Not implemented)
                       Q: Quit/Log Out
                       
                       Please enter your choice: """

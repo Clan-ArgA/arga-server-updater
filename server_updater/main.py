@@ -9,6 +9,9 @@ from server_updater.infrastructure.wirings.use_cases.create_symlink_use_case_wir
 from server_updater.infrastructure.wirings.use_cases.lower_case_mods_use_case_wiring import (
     LowerCaseModsUseCaseWiring,
 )
+from server_updater.infrastructure.wirings.use_cases.mod_sign_key_file_use_case_wiring import (
+    ModSignKeyFileUseCaseWiring,
+)
 from server_updater.infrastructure.wirings.use_cases.mod_use_case_wiring import (
     ModUseCaseWiring,
 )
@@ -46,6 +49,7 @@ class ServerManager:
             "c": ServerUseCaseWiring,
             "d": CreateSymlinkUseCaseWiring,
             "e": LowerCaseModsUseCaseWiring,
+            "f": ModSignKeyFileUseCaseWiring,
             "q": self._quit,
         }
 
@@ -54,5 +58,7 @@ class ServerManager:
         sys.exit()
 
     def _bad_choice(self) -> None:
-        self._io_adapter.output("\nYou must only select either A,B,C,D,E or Q to quit.")
+        self._io_adapter.output(
+            "\nYou must only select either A,B,C,D,E,F or Q to quit."
+        )
         self._io_adapter.output("Please try again")

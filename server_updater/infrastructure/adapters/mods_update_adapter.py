@@ -8,7 +8,7 @@ from server_updater.config import PATTERN
 from server_updater.domain.constants import UpdateType
 from server_updater.domain.miscellaneous.i_o_repository import IORepository
 from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
-from server_updater.domain.mods.mods_repocitory import ModRepository
+from server_updater.domain.mods.mods_repository import ModRepository
 from server_updater.domain.mods.mods_update_repository import ModsUpdateRepository
 from server_updater.domain.steam_command.steam_command_repository import (
     SteamCommandRepository,

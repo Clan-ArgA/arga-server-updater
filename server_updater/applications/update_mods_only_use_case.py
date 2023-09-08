@@ -6,6 +6,9 @@ from server_updater.domain.lower_case_mods.lower_case_mods_repository import (
 )
 from server_updater.domain.mod_symlink.mod_symlink_service import ModSymlinkService
 from server_updater.domain.mods.mods_update_service import ModsUpdateService
+from server_updater.domain.mods_key_files.mod_sign_key_file_service import (
+    ModSignKeyFileService,
+)
 
 
 class UpdateModsOnlyUseCase:
@@ -14,14 +17,17 @@ class UpdateModsOnlyUseCase:
         mods_update_service: ModsUpdateService,
         lower_case_mods_adapter: LowerCaseModsRepository,
         mod_symlink_service: ModSymlinkService,
+        sign_key_service: ModSignKeyFileService,
     ):
         self._mods_update_service = mods_update_service
         self._lower_case_mods_adapter = lower_case_mods_adapter
         self._mod_symlink_service = mod_symlink_service
+        self._sign_key_service = sign_key_service
 
     @generic_error_handler
     def update(self) -> bool:
         self._mods_update_service.update()
         self._lower_case_mods_adapter.to_lower()
         self._mod_symlink_service.create()
+        self._sign_key_service.copy()
         return True
