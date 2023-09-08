@@ -31,7 +31,8 @@ class ServerManager:
             if selected.lower() == "q":
                 self._quit()
             try:
-                choices.get(selected.lower())().instantiate()
+                instance = choices.get(selected.lower())().instantiate()
+                instance.update()
             except (KeyError, TypeError):
                 self._bad_choice()
 
