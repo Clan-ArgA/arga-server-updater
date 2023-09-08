@@ -32,11 +32,10 @@ class ServerManager:
                 self._quit()
             try:
                 choices.get(selected.lower())().instantiate()
-            except KeyError:
+            except (KeyError, TypeError):
                 self._bad_choice()
 
     def _show_options(self) -> str:
-        self._io_adapter.output("\n\n")
         return self._io_adapter.input()
 
     def _get_choices(self) -> Dict[str, Any]:
@@ -56,4 +55,3 @@ class ServerManager:
     def _bad_choice(self) -> None:
         self._io_adapter.output("\nYou must only select either A,B,C,D,E or Q to quit.")
         self._io_adapter.output("Please try again")
-        time.sleep(2)
