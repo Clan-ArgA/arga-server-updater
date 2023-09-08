@@ -1,3 +1,5 @@
+from typing import Optional
+
 from server_updater.domain.miscellaneous.i_o_repository import IORepository
 
 
@@ -17,6 +19,6 @@ class IOAdapter(IORepository):
         )
 
     @staticmethod
-    def output(msg: str) -> None:
+    def output(msg: Optional[str] = "") -> None:
         """Print the message."""
         print(msg)
