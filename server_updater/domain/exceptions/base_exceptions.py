@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Any
+from typing import Optional, Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -9,7 +9,7 @@ class UpdaterException(Exception):
 
     MESSAGE: Optional[str] = None
 
-    def dict(self) -> dict[str, str]:
+    def dict(self) -> Dict[str, str]:
         """Return error message as dict"""
 
         return {"error": f"{self._get_message()}"}
@@ -40,7 +40,7 @@ class UpdaterGenericError(UpdaterException):
         self._exception_or_message = msg
         logger.error(f"ERROR: Generic error: {self._exception_or_message}.")
 
-    def dict(self):
+    def dict(self) -> Dict[str, str]:
         return {"error": f"Generic error: {self._exception_or_message}."}
 
 
