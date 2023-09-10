@@ -23,20 +23,20 @@ class SteamCmd(SteamCommandRepository):
         self._steam_pass = steam_pass
 
     @generic_error_handler
-    def run(self, update_type: UpdateType, mod_id: Optional[int] = None) -> None:
+    def run(self, update_type: UpdateType, mod_id: Optional[str] = None) -> None:
         try:
             params = self._get_params()[update_type](mod_id)
             os.system(f"{STEAM_CMD} {params}")
         except KeyError:
             raise UpdateTypeException(update_type=update_type)
 
-    def _get_update_server_params(self, mod_id: Optional[int] = None) -> str:
+    def _get_update_server_params(self, mod_id: Optional[str] = None) -> str:
         steam_cmd_params = self._steam_cmd_params
         steam_cmd_params += f" +app_update {A3_SERVER_ID} validate"
         steam_cmd_params += " +quit"
         return steam_cmd_params
 
-    def _get_update_mod_params(self, mod_id: int) -> str:
+    def _get_update_mod_params(self, mod_id: str) -> str:
         steam_cmd_params = self._steam_cmd_params
         steam_cmd_params += f" +workshop_download_item {A3_WORKSHOP_ID} {mod_id}"
         steam_cmd_params += " validate +quit"
