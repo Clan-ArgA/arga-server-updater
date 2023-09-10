@@ -7,6 +7,8 @@ RUN apt-get update && \
         git \
         curl \
         python3 \
+        nano \
+        pip \
         lib32stdc++6 \
         lib32gcc-s1 \
         libcurl4 \
