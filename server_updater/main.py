@@ -133,7 +133,7 @@ class ServerUpdater:
                 else:
                     print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                     continue
-            self._steamcmd.run(UpdateType.MOD_SHORT)
+            self._steamcmd.run(UpdateType.MODS_ONLY)
 
             # Keep trying until the download actually succeeded
             tries = 0

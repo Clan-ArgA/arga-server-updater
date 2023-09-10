@@ -17,7 +17,7 @@ class SteamCmdTest(TestCase):
     def test_steamcmd_mod_short(self, mock_system):
         expected = "/home/steam/steamcmd/steamcmd.sh  +force_install_dir /home/steam/steamcmd/arma3 +quit"
         steamcmd = SteamCmd()
-        steamcmd.run(update_type=UpdateType.MOD_SHORT)
+        steamcmd.run(update_type=UpdateType.MODS_ONLY)
         mock_system.assert_called_with(expected)
 
     @patch("os.system")

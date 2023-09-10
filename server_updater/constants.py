@@ -4,4 +4,4 @@ from enum import Enum
 class UpdateType(Enum):
     SERVER = "server"
     MOD = "mod"
-    MOD_SHORT = "mod_short"
+    MODS_ONLY = "mod_only"

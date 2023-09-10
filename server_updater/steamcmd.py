@@ -50,5 +50,5 @@ class SteamCmd:
         return {
             UpdateType.SERVER: self._get_update_server_params,
             UpdateType.MOD: self._get_update_mod_params,
-            UpdateType.MOD_SHORT: self._get_update_mod_short_params,
+            UpdateType.MODS_ONLY: self._get_update_mod_short_params,
         }
