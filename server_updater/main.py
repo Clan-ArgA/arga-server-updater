@@ -61,7 +61,7 @@ class ServerUpdater:
 
     def _update_server(self) -> None:
         self._logger.log(f"Updating A3 server ({A3_SERVER_ID})")
-        self._steamcmd.run(UpdateType.SERVER)
+        self._steamcmd.run(update_type=UpdateType.SERVER)
 
     def _create_mod_symlinks(self) -> None:
         self._logger.log("Creating symlinks...")
@@ -138,7 +138,7 @@ class ServerUpdater:
             tries = 0
             while os.path.isdir(path) is False and tries < 10:
                 self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
-                self._steamcmd.run(UpdateType.MOD)
+                self._steamcmd.run(update_type=UpdateType.MOD, mod_id=mod_id)
                 # Sleep for a bit so that we can kill the script if needed
                 time.sleep(5)
                 tries += 1
