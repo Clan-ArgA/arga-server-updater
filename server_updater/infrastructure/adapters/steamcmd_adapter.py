@@ -31,28 +31,25 @@ class SteamCmd(SteamCommandRepository):
             raise UpdateTypeException(update_type=update_type)
 
     def _get_update_server_params(self, mod_id: Optional[int] = None) -> str:
-        steam_cmd_params = f" +login {self._steam_user} {self._steam_pass}"
-        steam_cmd_params += f" +force_install_dir {A3_SERVER_DIR}"
+        steam_cmd_params = self._steam_cmd_params
         steam_cmd_params += f" +app_update {A3_SERVER_ID} validate"
         steam_cmd_params += " +quit"
         return steam_cmd_params
 
-    @staticmethod
-    def _get_update_mod_short_params(mod_id: Optional[int] = None) -> str:
-        return f" +force_install_dir {A3_SERVER_DIR} +quit"
-
     def _get_update_mod_params(self, mod_id: int) -> str:
-        steam_cmd_params = f" +login {self._steam_user} {self._steam_pass}"
-        steam_cmd_params += f" +force_install_dir {A3_SERVER_DIR}"
-        steam_cmd_params += (
-            f" +workshop_download_item {A3_WORKSHOP_ID} {mod_id} validate"
-        )
-        steam_cmd_params += " +quit"
+        steam_cmd_params = self._steam_cmd_params
+        steam_cmd_params += f" +workshop_download_item {A3_WORKSHOP_ID} {mod_id}"
+        steam_cmd_params += " validate +quit"
         return steam_cmd_params
 
     def _get_params(self) -> Dict[UpdateType, Any]:
         return {
             UpdateType.SERVER: self._get_update_server_params,
             UpdateType.MOD: self._get_update_mod_params,
-            UpdateType.MOD_SHORT: self._get_update_mod_short_params,
         }
+
+    @property
+    def _steam_cmd_params(self) -> str:
+        steam_cmd_params = f" +force_install_dir {A3_SERVER_DIR}"
+        steam_cmd_params += f" +login {self._steam_user} {self._steam_pass}"
+        return steam_cmd_params

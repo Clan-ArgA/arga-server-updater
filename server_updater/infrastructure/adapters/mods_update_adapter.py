@@ -42,7 +42,6 @@ class ModsUpdateAdapter(ModsUpdateRepository):
             else:
                 print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 return False
-        self._steamcmd.run(UpdateType.MOD_SHORT)
 
         # Keep trying until the download actually succeeded
         tries = 0

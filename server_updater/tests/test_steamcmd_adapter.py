@@ -11,21 +11,18 @@ class SteamCmdTest(TestCase):
             steam_user="user",
             steam_pass="pass",
         )
+        self._expected = "/home/steam/steamcmd/steamcmd.sh  "
+        self._expected += "+force_install_dir /home/steam/steamcmd/arma3"
+        self._expected += f" +login user pass"
 
     @patch("os.system")
     def test_steamcmd_server(self, mock_system):
-        expected = "/home/steam/steamcmd/steamcmd.sh  +login user pass +force_install_dir /home/steam/steamcmd/arma3 +app_update 233780 validate +quit"
+        expected = f"{self._expected} +app_update 233780 validate +quit"
         self._steamcmd.run(update_type=UpdateType.SERVER)
         mock_system.assert_called_with(expected)
 
     @patch("os.system")
-    def test_steamcmd_mod_short(self, mock_system):
-        expected = "/home/steam/steamcmd/steamcmd.sh  +force_install_dir /home/steam/steamcmd/arma3 +quit"
-        self._steamcmd.run(update_type=UpdateType.MOD_SHORT)
-        mock_system.assert_called_with(expected)
-
-    @patch("os.system")
     def test_steamcmd_mod(self, mock_system):
-        expected = "/home/steam/steamcmd/steamcmd.sh  +login user pass +force_install_dir /home/steam/steamcmd/arma3 +workshop_download_item 107410 15 validate +quit"
+        expected = f"{self._expected} +workshop_download_item 107410 15 validate +quit"
         self._steamcmd.run(update_type=UpdateType.MOD, mod_id=15)
         mock_system.assert_called_with(expected)
