@@ -19,26 +19,16 @@ class SteamCmd:
         os.system(f"{STEAM_CMD} {params}")
         print("")
 
-    @staticmethod
-    def _get_update_server_params(mod_id: Optional[int] = None) -> str:
-        steam_cmd_params = f" +login {STEAM_USER} {STEAM_PASS}"
-        steam_cmd_params += f" +force_install_dir {A3_SERVER_DIR}"
+    def _get_update_server_params(self, mod_id: Optional[int] = None) -> str:
+        steam_cmd_params = self._steam_cmd_params
         steam_cmd_params += f" +app_update {A3_SERVER_ID} validate"
         steam_cmd_params += " +quit"
         return steam_cmd_params
 
-    @staticmethod
-    def _get_update_mod_short_params(mod_id: Optional[int] = None) -> str:
-        return f" +force_install_dir {A3_SERVER_DIR} +quit"
-
-    @staticmethod
-    def _get_update_mod_params(mod_id: int) -> str:
-        steam_cmd_params = f" +login {STEAM_USER} {STEAM_PASS}"
-        steam_cmd_params += f" +force_install_dir {A3_SERVER_DIR}"
-        steam_cmd_params += (
-            f" +workshop_download_item {A3_WORKSHOP_ID} {mod_id} validate"
-        )
-        steam_cmd_params += " +quit"
+    def _get_update_mod_params(self, mod_id: int) -> str:
+        steam_cmd_params = self._steam_cmd_params
+        steam_cmd_params += f" +workshop_download_item {A3_WORKSHOP_ID} {mod_id}"
+        steam_cmd_params += " validate +quit"
         return steam_cmd_params
 
     @staticmethod
@@ -50,5 +40,10 @@ class SteamCmd:
         return {
             UpdateType.SERVER: self._get_update_server_params,
             UpdateType.MOD: self._get_update_mod_params,
-            UpdateType.MODS_ONLY: self._get_update_mod_short_params,
         }
+
+    @property
+    def _steam_cmd_params(self) -> str:
+        steam_cmd_params = f" +force_install_dir {A3_SERVER_DIR}"
+        steam_cmd_params += f" +login {STEAM_USER} {STEAM_PASS}"
+        return steam_cmd_params
