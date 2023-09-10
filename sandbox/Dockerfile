@@ -28,4 +28,3 @@ RUN mkdir /home/steam/steamcmd &&  \
 RUN mkdir /home/steam/scripts &&  \
     cd /home/steam/scripts \
 
-RUN git clone https://vulturARG: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@github.com/Clan-ArgA/arga-server-updater.git
