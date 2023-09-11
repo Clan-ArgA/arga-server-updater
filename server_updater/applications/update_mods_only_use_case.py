@@ -1,3 +1,5 @@
+from typing import Dict
+
 from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
@@ -31,3 +33,16 @@ class UpdateModsOnlyUseCase:
         self._mod_symlink_service.create()
         self._sign_key_service.copy()
         return True
+
+    @generic_error_handler
+    def update_and_save(self, file_name: str, mods: Dict[str, Dict[str, str]]) -> bool:
+        self._save_mods_to_file(file_name=file_name, mods=mods)
+        self.update()
+        return True
+
+    @generic_error_handler
+    def _save_mods_to_file(self, file_name: str, mods: Dict[str, Dict[str, str]]) -> None:
+        self._mods_update_service.save_mods_to_file(file_name=file_name, mods=mods)
+
+
+

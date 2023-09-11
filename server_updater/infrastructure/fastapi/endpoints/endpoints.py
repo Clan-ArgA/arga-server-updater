@@ -1,9 +1,14 @@
 from typing import Dict
 
 from fastapi import Depends, HTTPException
+from fastapi.openapi.models import Response
 from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi import FastAPI
+
+from server_updater.infrastructure.fastapi.endpoints.mods import Mods
+from server_updater.infrastructure.wirings.use_cases.mod_use_case_wiring import ModUseCaseWiring
+from server_updater.infrastructure.wirings.use_cases.server_use_case_wiring import ServerUseCaseWiring
 
 # from fastapi.security import OAuth2PasswordBearer
 # from passlib.context import CryptContext
@@ -42,3 +47,17 @@ def get_home():
 @app.get("/status", response_model=dict)
 def get_status():
     return {"status": "alive"}
+
+
+@app.post("/update_server", response_model=dict)
+async def update_server():
+    server = ServerUseCaseWiring().instantiate()
+    server.update()
+    return {"message": "update_server"}
+
+
+@app.post("/update_mods", response_model=dict)
+async def update_mods(mods: Mods):
+    mods_instance = ModUseCaseWiring().instantiate()
+    mods_instance.update_and_save(mods=mods.mods)
+    return {"message": "update_mods"}

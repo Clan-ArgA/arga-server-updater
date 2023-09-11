@@ -4,7 +4,9 @@ services:
     build: .
     platform: linux/amd64
     container_name: arma3
-    network_mode: host
+#    network_mode: host
+    ports:
+      - "8000:8000"
     volumes:
       - './missions:/arma3/mpmissions'
       - './configs:/arma3/configs'

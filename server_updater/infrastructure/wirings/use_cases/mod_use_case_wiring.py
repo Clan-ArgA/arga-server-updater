@@ -41,8 +41,8 @@ class ModUseCaseWiring:
     @property
     def _mods_update_service(self) -> ModsUpdateService:
         return ModsUpdateService(
-            mod_update_repository=self._mod_update_repository,
-            mods_repository=ModJSONAdapter(),
+            mod_update_port=self._mod_update_repository,
+            mods_port=ModJSONAdapter(),
         )
 
     @property
