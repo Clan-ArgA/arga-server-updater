@@ -2,7 +2,9 @@ from server_updater.applications.create_mod_symlinks_use_case import (
     CreateModSymlinksUseCase,
 )
 from server_updater.domain.mod_symlink.mod_symlink_service import ModSymlinkService
-from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import (
+    LoggerTerminalAdapter,
+)
 from server_updater.infrastructure.adapters.mods_json_adapter import ModJSONAdapter
 from server_updater.infrastructure.wirings.mods_symlink_wiring import ModSymlinkWiring
 
@@ -10,7 +12,8 @@ from server_updater.infrastructure.wirings.mods_symlink_wiring import ModSymlink
 class CreateSymlinkUseCaseWiring:
     def instantiate(self) -> CreateModSymlinksUseCase:
         return CreateModSymlinksUseCase(
-            logger=LoggerTerminalAdapter(), mod_symlink_service=self._mod_symlink_service
+            logger=LoggerTerminalAdapter(),
+            mod_symlink_service=self._mod_symlink_service,
         )
 
     @property

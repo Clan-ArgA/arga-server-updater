@@ -2,12 +2,12 @@ from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
 from server_updater.domain.mods.mods_repository import ModRepository
-from server_updater.domain.mods.mods_update_repository import ModsUpdateRepository
+from server_updater.domain.mods.mods_update_port import ModsUpdatePort
 
 
 class ModsUpdateService:
     def __init__(
-        self, mod_update_repository: ModsUpdateRepository, mods_repository: ModRepository
+        self, mod_update_repository: ModsUpdatePort, mods_repository: ModRepository
     ):
         self._mod_update = mod_update_repository
         self._mods_repository = mods_repository

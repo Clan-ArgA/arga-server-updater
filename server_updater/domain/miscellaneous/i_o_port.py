@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 
-class IORepository(ABC):
+class IOPort(ABC):
     @staticmethod
     @abstractmethod
     def input() -> str:

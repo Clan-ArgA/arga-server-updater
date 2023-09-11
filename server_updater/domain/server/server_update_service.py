@@ -3,14 +3,14 @@ from server_updater.domain.constants import UpdateType
 from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
-from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
-from server_updater.domain.steam_command.steam_command_repository import (
-    SteamCommandRepository,
+from server_updater.domain.miscellaneous.logger_port import LoggerPort
+from server_updater.domain.steam_command.steam_command_port import (
+    SteamCommandPort,
 )
 
 
 class ServerUpdateService:
-    def __init__(self, logger: LoggerRepository, steamcmd: SteamCommandRepository):
+    def __init__(self, logger: LoggerPort, steamcmd: SteamCommandPort):
         self._logger = logger
         self._steamcmd = steamcmd
 

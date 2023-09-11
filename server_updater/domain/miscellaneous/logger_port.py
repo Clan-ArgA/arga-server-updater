@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class LoggerRepository(ABC):
+class LoggerPort(ABC):
     @staticmethod
     @abstractmethod
     def print_head(msg: str) -> None:

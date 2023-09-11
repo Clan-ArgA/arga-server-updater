@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class LowerCaseModsRepository(ABC):
+class LowerCaseModsPort(ABC):
     @staticmethod
     @abstractmethod
     def to_lower() -> None:

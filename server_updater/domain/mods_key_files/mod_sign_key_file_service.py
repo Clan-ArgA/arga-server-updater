@@ -1,13 +1,11 @@
-from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
-from server_updater.domain.mods_key_files.mod_sign_key_file_repository import (
-    ModSignKeyFileRepository,
+from server_updater.domain.miscellaneous.logger_port import LoggerPort
+from server_updater.domain.mods_key_files.mod_sign_key_file_port import (
+    ModSignKeyFilePort,
 )
 
 
 class ModSignKeyFileService:
-    def __init__(
-        self, sign_repository: ModSignKeyFileRepository, logger: LoggerRepository
-    ):
+    def __init__(self, sign_repository: ModSignKeyFilePort, logger: LoggerPort):
         self._sign_repository = sign_repository
         self._logger = logger
 

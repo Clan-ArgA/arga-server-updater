@@ -3,7 +3,9 @@ from typing import Dict, Any
 
 import uvicorn
 
-from server_updater.infrastructure.adapters.i_o_terminal_adapter import IOTerminalAdapter
+from server_updater.infrastructure.adapters.i_o_terminal_adapter import (
+    IOTerminalAdapter,
+)
 from server_updater.infrastructure.fastapi.endpoints.endpoints import app
 from server_updater.main import ServerManager
 

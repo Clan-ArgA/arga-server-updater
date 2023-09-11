@@ -1,6 +1,6 @@
-from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
-from server_updater.domain.mod_symlink.mod_symlink_repository import (
-    ModSymlinkRepository,
+from server_updater.domain.miscellaneous.logger_port import LoggerPort
+from server_updater.domain.mod_symlink.mod_symlink_port import (
+    ModSymlinkPort,
 )
 from server_updater.domain.mods.mods_repository import ModRepository
 
@@ -8,9 +8,9 @@ from server_updater.domain.mods.mods_repository import ModRepository
 class ModSymlinkService:
     def __init__(
         self,
-        logger: LoggerRepository,
+        logger: LoggerPort,
         mods_repository: ModRepository,
-        mod_symlink_repository: ModSymlinkRepository,
+        mod_symlink_repository: ModSymlinkPort,
     ):
         self._mods_repository = mods_repository
         self._logger = logger

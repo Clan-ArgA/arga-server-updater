@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ModSignKeyFileRepository(ABC):
+class ModSignKeyFilePort(ABC):
     @staticmethod
     @abstractmethod
     def copy() -> str:

@@ -4,12 +4,12 @@ import shutil
 from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
-from server_updater.domain.mods_key_files.mod_sign_key_file_repository import (
-    ModSignKeyFileRepository,
+from server_updater.domain.mods_key_files.mod_sign_key_file_port import (
+    ModSignKeyFilePort,
 )
 
 
-class ModSignKeyFileAdapter(ModSignKeyFileRepository):
+class ModSignKeyFileAdapter(ModSignKeyFilePort):
     def __init__(self, source_directory: str, destination_directory: str):
         self._source_directory = source_directory
         self._destination_directory = destination_directory

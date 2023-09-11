@@ -1,8 +1,7 @@
 import sys
-import time
 from typing import Dict, Any
 
-from server_updater.domain.miscellaneous.i_o_repository import IORepository
+from server_updater.domain.miscellaneous.i_o_port import IOPort
 from server_updater.infrastructure.wirings.use_cases.create_symlink_use_case_wiring import (
     CreateSymlinkUseCaseWiring,
 )
@@ -24,7 +23,7 @@ from server_updater.infrastructure.wirings.use_cases.server_use_case_wiring impo
 
 
 class ServerManager:
-    def __init__(self, io_adapter: IORepository):
+    def __init__(self, io_adapter: IOPort):
         self._io_adapter = io_adapter
 
     def run(self):

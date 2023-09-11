@@ -5,16 +5,18 @@ from server_updater.config import (
     MOD_KEYS_SOURCE_DIRECTORY,
     MOD_KEYS_DESTINATION_DIRECTORY,
 )
-from server_updater.domain.mod_symlink.mod_symlink_repository import (
-    ModSymlinkRepository,
+from server_updater.domain.mod_symlink.mod_symlink_port import (
+    ModSymlinkPort,
 )
 from server_updater.domain.mod_symlink.mod_symlink_service import ModSymlinkService
-from server_updater.domain.mods.mods_update_repository import ModsUpdateRepository
+from server_updater.domain.mods.mods_update_port import ModsUpdatePort
 from server_updater.domain.mods.mods_update_service import ModsUpdateService
 from server_updater.domain.mods_key_files.mod_sign_key_file_service import (
     ModSignKeyFileService,
 )
-from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import (
+    LoggerTerminalAdapter,
+)
 from server_updater.infrastructure.adapters.lower_case_mods_os_adapter import (
     LowerCaseModsOsAdapter,
 )
@@ -39,11 +41,12 @@ class ModUseCaseWiring:
     @property
     def _mods_update_service(self) -> ModsUpdateService:
         return ModsUpdateService(
-            mod_update_repository=self._mod_update_repository, mods_repository=ModJSONAdapter()
+            mod_update_repository=self._mod_update_repository,
+            mods_repository=ModJSONAdapter(),
         )
 
     @property
-    def _mod_update_repository(self) -> ModsUpdateRepository:
+    def _mod_update_repository(self) -> ModsUpdatePort:
         return ModsUpdateAdapter(
             logger=LoggerTerminalAdapter(),
             steamcmd=SteamcmdWiring().instantiate(),
@@ -61,7 +64,7 @@ class ModUseCaseWiring:
         )
 
     @property
-    def _mod_symlink_repository(self) -> ModSymlinkRepository:
+    def _mod_symlink_repository(self) -> ModSymlinkPort:
         return ModSymlinkAdapter(
             a3_workshop_dir=A3_WORKSHOP_DIR,
             workshop_changelog_url=WORKSHOP_CHANGELOG_URL,

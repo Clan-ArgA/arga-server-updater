@@ -12,12 +12,12 @@ from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
 from server_updater.domain.exceptions.steamcmd_exceptions import UpdateTypeException
-from server_updater.domain.steam_command.steam_command_repository import (
-    SteamCommandRepository,
+from server_updater.domain.steam_command.steam_command_port import (
+    SteamCommandPort,
 )
 
 
-class SteamCmd(SteamCommandRepository):
+class SteamCmd(SteamCommandPort):
     def __init__(self, steam_user: str, steam_pass: str):
         self._steam_user = steam_user
         self._steam_pass = steam_pass

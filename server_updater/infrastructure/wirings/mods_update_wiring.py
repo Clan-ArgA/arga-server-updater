@@ -1,5 +1,7 @@
 from server_updater.config import WORKSHOP_CHANGELOG_URL, A3_WORKSHOP_DIR
-from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import (
+    LoggerTerminalAdapter,
+)
 from server_updater.infrastructure.adapters.mods_json_adapter import ModJSONAdapter
 from server_updater.infrastructure.adapters.mods_update_adapter import ModsUpdateAdapter
 from server_updater.infrastructure.adapters.steamcmd_adapter import SteamCmd

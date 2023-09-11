@@ -1,7 +1,9 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import (
+    LoggerTerminalAdapter,
+)
 
 
 class TestlogAdapter(TestCase):

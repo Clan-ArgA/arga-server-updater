@@ -6,20 +6,20 @@ from urllib import request
 
 from server_updater.config import PATTERN
 from server_updater.domain.constants import UpdateType
-from server_updater.domain.miscellaneous.i_o_repository import IORepository
-from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
+from server_updater.domain.miscellaneous.i_o_port import IOPort
+from server_updater.domain.miscellaneous.logger_port import LoggerPort
 from server_updater.domain.mods.mods_repository import ModRepository
-from server_updater.domain.mods.mods_update_repository import ModsUpdateRepository
-from server_updater.domain.steam_command.steam_command_repository import (
-    SteamCommandRepository,
+from server_updater.domain.mods.mods_update_port import ModsUpdatePort
+from server_updater.domain.steam_command.steam_command_port import (
+    SteamCommandPort,
 )
 
 
-class ModsUpdateAdapter(ModsUpdateRepository):
+class ModsUpdateAdapter(ModsUpdatePort):
     def __init__(
         self,
-        logger: LoggerRepository,
-        steamcmd: SteamCommandRepository,
+        logger: LoggerPort,
+        steamcmd: SteamCommandPort,
         mods_repository: ModRepository,
         a3_workshop_dir: str,
         workshop_changelog_url: str,
@@ -53,7 +53,9 @@ class ModsUpdateAdapter(ModsUpdateRepository):
             tries += 1
 
         if tries >= 10:
-            self._logger.print_head(f"!! Updating {mod_name} failed after {tries} tries !!")
+            self._logger.print_head(
+                f"!! Updating {mod_name} failed after {tries} tries !!"
+            )
 
         return True
 

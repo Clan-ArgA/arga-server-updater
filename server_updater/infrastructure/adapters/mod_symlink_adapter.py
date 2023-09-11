@@ -1,12 +1,12 @@
 import os
 from typing import Optional
 
-from server_updater.domain.mod_symlink.mod_symlink_repository import (
-    ModSymlinkRepository,
+from server_updater.domain.mod_symlink.mod_symlink_port import (
+    ModSymlinkPort,
 )
 
 
-class ModSymlinkAdapter(ModSymlinkRepository):
+class ModSymlinkAdapter(ModSymlinkPort):
     def __init__(
         self,
         a3_workshop_dir: str,

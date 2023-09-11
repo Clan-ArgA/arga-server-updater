@@ -8,5 +8,7 @@ class ModRepository(ABC):
         """List the Mods."""
 
     @abstractmethod
-    def save_mods_to_json(self, file_name: str, mods: Dict[str, Dict[str, str]]) -> None:
+    def save_mods_to_json(
+        self, file_name: str, mods: Dict[str, Dict[str, str]]
+    ) -> None:
         """Save the Mods to a JSON file."""

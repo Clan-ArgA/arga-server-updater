@@ -4,7 +4,7 @@ from typing import Optional
 from server_updater.domain.constants import UpdateType
 
 
-class SteamCommandRepository(ABC):
+class SteamCommandPort(ABC):
     @abstractmethod
     def run(self, update_type: UpdateType, mod_id: Optional[str] = None) -> None:
         """Run the steamcmd with parameters"""

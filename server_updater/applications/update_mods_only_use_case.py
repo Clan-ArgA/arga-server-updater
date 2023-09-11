@@ -1,8 +1,8 @@
 from server_updater.domain.exceptions.decorators.generic_error_handler import (
     generic_error_handler,
 )
-from server_updater.domain.lower_case_mods.lower_case_mods_repository import (
-    LowerCaseModsRepository,
+from server_updater.domain.lower_case_mods.lower_case_mods_port import (
+    LowerCaseModsPort,
 )
 from server_updater.domain.mod_symlink.mod_symlink_service import ModSymlinkService
 from server_updater.domain.mods.mods_update_service import ModsUpdateService
@@ -15,7 +15,7 @@ class UpdateModsOnlyUseCase:
     def __init__(
         self,
         mods_update_service: ModsUpdateService,
-        lower_case_mods_adapter: LowerCaseModsRepository,
+        lower_case_mods_adapter: LowerCaseModsPort,
         mod_symlink_service: ModSymlinkService,
         sign_key_service: ModSignKeyFileService,
     ):

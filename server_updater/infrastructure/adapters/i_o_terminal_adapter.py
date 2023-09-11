@@ -1,9 +1,9 @@
 from typing import Optional
 
-from server_updater.domain.miscellaneous.i_o_repository import IORepository
+from server_updater.domain.miscellaneous.i_o_port import IOPort
 
 
-class IOTerminalAdapter(IORepository):
+class IOTerminalAdapter(IOPort):
     @staticmethod
     def input() -> str:
         """User input."""
