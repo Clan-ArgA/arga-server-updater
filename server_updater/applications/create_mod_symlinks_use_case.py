@@ -12,5 +12,5 @@ class CreateModSymlinksUseCase:
         self._mod_symlink_service = mod_symlink_service
 
     def create(self) -> bool:
-        self._logger.info("Creating symlinks...")
+        self._logger.print_head("Creating symlinks...")
         return self._mod_symlink_service.create()

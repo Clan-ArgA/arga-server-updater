@@ -10,5 +10,5 @@ class LowerCaseModsUseCase:
         self._logger = logger
 
     def to_lower(self) -> None:
-        self._logger.info("Converting uppercase files/folders to lowercase...")
+        self._logger.print_head("Converting uppercase files/folders to lowercase...")
         self._lower_case_mods.to_lower()

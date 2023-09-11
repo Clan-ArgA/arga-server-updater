@@ -14,7 +14,7 @@ class ModsUpdateService:
 
     @generic_error_handler
     def update(self) -> bool:
-        mods = self._mods.get()
+        mods = self._mods.list_mods()
         for mod_name, mod_id in mods.items():
             self._mod_update.update(mod_name=mod_name, mod_id=mod_id)
         return True

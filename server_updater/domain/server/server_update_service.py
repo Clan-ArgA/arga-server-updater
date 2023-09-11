@@ -16,6 +16,6 @@ class ServerUpdateService:
 
     @generic_error_handler
     def update(self) -> bool:
-        self._logger.info(f"Updating A3 server ({A3_SERVER_ID})")
+        self._logger.print_head(f"Updating A3 server ({A3_SERVER_ID})")
         self._steamcmd.run(UpdateType.SERVER)
         return True

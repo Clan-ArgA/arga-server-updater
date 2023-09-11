@@ -46,14 +46,14 @@ class ModsUpdateAdapter(ModsUpdateRepository):
         # Keep trying until the download actually succeeded
         tries = 0
         while os.path.isdir(path) is False and tries < 10:
-            self._logger.info(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
+            self._logger.print_head(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
             self._steamcmd.run(update_type=UpdateType.MOD, mod_id=mod_id)
             # Sleep for a bit so that we can kill the script if needed
             time.sleep(5)
             tries += 1
 
         if tries >= 10:
-            self._logger.info(f"!! Updating {mod_name} failed after {tries} tries !!")
+            self._logger.print_head(f"!! Updating {mod_name} failed after {tries} tries !!")
 
         return True
 

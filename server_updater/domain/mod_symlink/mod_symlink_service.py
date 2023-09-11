@@ -18,8 +18,8 @@ class ModSymlinkService:
 
     def create(self) -> bool:
         """Create Mod Symlink."""
-        self._logger.info("Creating symlinks...")
-        mods = self._mods.get()
+        self._logger.print_head("Creating symlinks...")
+        mods = self._mods.list_mods()
         for mod_name, mod_id in mods.items():
             response = self._mod_symlink_repository.create(
                 mod_name=mod_name, mod_id=mod_id

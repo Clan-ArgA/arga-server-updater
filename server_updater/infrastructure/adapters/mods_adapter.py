@@ -6,6 +6,6 @@ from server_updater.infrastructure.data.mods import MODS
 
 class ModAdapter(ModRepository):
     @staticmethod
-    def get() -> Dict[str, str]:
+    def list_mods() -> Dict[str, str]:
         """Get the URL"""
         return MODS

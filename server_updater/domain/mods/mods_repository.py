@@ -5,5 +5,5 @@ from typing import Dict
 class ModRepository(ABC):
     @staticmethod
     @abstractmethod
-    def get() -> Dict[str, str]:
+    def list_mods() -> Dict[str, str]:
         """Get the Mods"""
