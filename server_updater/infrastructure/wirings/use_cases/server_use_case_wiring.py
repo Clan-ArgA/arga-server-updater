@@ -2,7 +2,7 @@ from server_updater.applications.update_server_only_use_case import (
     UpdateServerOnlyUseCase,
 )
 from server_updater.domain.server.server_update_service import ServerUpdateService
-from server_updater.infrastructure.adapters.logger_adapter import LoggerAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
 from server_updater.infrastructure.wirings.steamcmd_wiring import SteamcmdWiring
 
 
@@ -15,6 +15,6 @@ class ServerUseCaseWiring:
     @property
     def _server_update_service(self) -> ServerUpdateService:
         return ServerUpdateService(
-            logger=LoggerAdapter(),
+            logger=LoggerTerminalAdapter(),
             steamcmd=SteamcmdWiring().instantiate(),
         )

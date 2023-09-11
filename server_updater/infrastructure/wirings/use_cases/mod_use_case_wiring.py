@@ -14,9 +14,9 @@ from server_updater.domain.mods.mods_update_service import ModsUpdateService
 from server_updater.domain.mods_key_files.mod_sign_key_file_service import (
     ModSignKeyFileService,
 )
-from server_updater.infrastructure.adapters.logger_adapter import LoggerAdapter
-from server_updater.infrastructure.adapters.lower_case_mods_adapter import (
-    LowerCaseModsAdapter,
+from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
+from server_updater.infrastructure.adapters.lower_case_mods_os_adapter import (
+    LowerCaseModsOsAdapter,
 )
 from server_updater.infrastructure.adapters.mod_sign_key_file_adapter import (
     ModSignKeyFileAdapter,
@@ -31,7 +31,7 @@ class ModUseCaseWiring:
     def instantiate(self) -> UpdateModsOnlyUseCase:
         return UpdateModsOnlyUseCase(
             mods_update_service=self._mods_update_service,
-            lower_case_mods_adapter=LowerCaseModsAdapter(),
+            lower_case_mods_adapter=LowerCaseModsOsAdapter(),
             mod_symlink_service=self._mod_symlink_service,
             sign_key_service=self._sign_key_service,
         )
@@ -39,15 +39,15 @@ class ModUseCaseWiring:
     @property
     def _mods_update_service(self) -> ModsUpdateService:
         return ModsUpdateService(
-            mod_update_repository=self._mod_update_repository, mods=ModAdapter()
+            mod_update_repository=self._mod_update_repository, mods_repository=ModAdapter()
         )
 
     @property
     def _mod_update_repository(self) -> ModsUpdateRepository:
         return ModsUpdateAdapter(
-            logger=LoggerAdapter(),
+            logger=LoggerTerminalAdapter(),
             steamcmd=SteamcmdWiring().instantiate(),
-            mods=ModAdapter(),
+            mods_repository=ModAdapter(),
             a3_workshop_dir=A3_WORKSHOP_DIR,
             workshop_changelog_url=WORKSHOP_CHANGELOG_URL,
         )
@@ -55,8 +55,8 @@ class ModUseCaseWiring:
     @property
     def _mod_symlink_service(self) -> ModSymlinkService:
         return ModSymlinkService(
-            logger=LoggerAdapter(),
-            mods=ModAdapter(),
+            logger=LoggerTerminalAdapter(),
+            mods_repository=ModAdapter(),
             mod_symlink_repository=self._mod_symlink_repository,
         )
 
@@ -71,7 +71,7 @@ class ModUseCaseWiring:
     def _sign_key_service(self) -> ModSignKeyFileService:
         return ModSignKeyFileService(
             sign_repository=self._sign_repository,
-            logger=LoggerAdapter(),
+            logger=LoggerTerminalAdapter(),
         )
 
     @property

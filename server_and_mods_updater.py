@@ -3,13 +3,13 @@ from typing import Dict, Any
 
 import uvicorn
 
-from server_updater.infrastructure.adapters.i_o_adapter import IOAdapter
+from server_updater.infrastructure.adapters.i_o_terminal_adapter import IOTerminalAdapter
 from server_updater.infrastructure.fastapi.endpoints.endpoints import app
 from server_updater.main import ServerManager
 
 
 def run_in_terminal() -> None:
-    server_updater = ServerManager(io_adapter=IOAdapter())
+    server_updater = ServerManager(io_adapter=IOTerminalAdapter())
     server_updater.run()
 
 

@@ -6,7 +6,7 @@ from server_updater.config import (
 from server_updater.domain.mods_key_files.mod_sign_key_file_service import (
     ModSignKeyFileService,
 )
-from server_updater.infrastructure.adapters.logger_adapter import LoggerAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
 from server_updater.infrastructure.adapters.mod_sign_key_file_adapter import (
     ModSignKeyFileAdapter,
 )
@@ -19,7 +19,7 @@ class ModSignKeyFileUseCaseWiring:
     def _sign_key_service(self) -> ModSignKeyFileService:
         return ModSignKeyFileService(
             sign_repository=self._sign_repository,
-            logger=LoggerAdapter(),
+            logger=LoggerTerminalAdapter(),
         )
 
     @property

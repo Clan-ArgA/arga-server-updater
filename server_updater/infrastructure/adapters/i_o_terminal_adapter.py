@@ -3,7 +3,7 @@ from typing import Optional
 from server_updater.domain.miscellaneous.i_o_repository import IORepository
 
 
-class IOAdapter(IORepository):
+class IOTerminalAdapter(IORepository):
     @staticmethod
     def input() -> str:
         """User input."""

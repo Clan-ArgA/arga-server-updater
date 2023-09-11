@@ -1,11 +1,11 @@
 from server_updater.domain.lower_case_mods.lower_case_mods_repository import (
     LowerCaseModsRepository,
 )
-from server_updater.infrastructure.adapters.logger_adapter import LoggerAdapter
+from server_updater.infrastructure.adapters.logger_terminal_adapter import LoggerTerminalAdapter
 
 
 class LowerCaseModsUseCase:
-    def __init__(self, lower_case_mods: LowerCaseModsRepository, logger: LoggerAdapter):
+    def __init__(self, lower_case_mods: LowerCaseModsRepository, logger: LoggerTerminalAdapter):
         self._lower_case_mods = lower_case_mods
         self._logger = logger
 

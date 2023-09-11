@@ -1,7 +1,7 @@
 from server_updater.domain.miscellaneous.logger_repository import LoggerRepository
 
 
-class LoggerAdapter(LoggerRepository):
+class LoggerTerminalAdapter(LoggerRepository):
     @staticmethod
     def print_head(msg: str) -> None:
         log_output = f"\n{'':=<{len(msg)}}\n{msg}\n{'':=<{len(msg)}}"

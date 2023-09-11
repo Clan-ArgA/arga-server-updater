@@ -9,12 +9,10 @@ from server_updater.domain.lower_case_mods.lower_case_mods_repository import (
 )
 
 
-class LowerCaseModsAdapter(LowerCaseModsRepository):
+class LowerCaseModsOsAdapter(LowerCaseModsRepository):
     @generic_error_handler
     def to_lower(self) -> None:
         """Converts the name of each mod to lowercase text."""
         os.system(
-            "(cd {} && find . -depth -exec rename -v 's/(.*)\/([^\/]*)/$1\/\L$2/' {{}} \;)".format(
-                A3_WORKSHOP_DIR
-            )
+            f"(cd {A3_WORKSHOP_DIR} && find . -depth -exec rename -v 's/(.*)\/([^\/]*)/$1\/\L$2/' {{}} \;)"
         )

@@ -9,17 +9,17 @@ class ModSymlinkService:
     def __init__(
         self,
         logger: LoggerRepository,
-        mods: ModRepository,
+        mods_repository: ModRepository,
         mod_symlink_repository: ModSymlinkRepository,
     ):
-        self._mods = mods
+        self._mods_repository = mods_repository
         self._logger = logger
         self._mod_symlink_repository = mod_symlink_repository
 
     def create(self) -> bool:
         """Create Mod Symlink."""
         self._logger.print_head("Creating symlinks...")
-        mods = self._mods.list_mods()
+        mods = self._mods_repository.list_mods()
         for mod_name, mod_id in mods.items():
             response = self._mod_symlink_repository.create(
                 mod_name=mod_name, mod_id=mod_id

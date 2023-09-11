@@ -20,13 +20,13 @@ class ModsUpdateAdapter(ModsUpdateRepository):
         self,
         logger: LoggerRepository,
         steamcmd: SteamCommandRepository,
-        mods: ModRepository,
+        mods_repository: ModRepository,
         a3_workshop_dir: str,
         workshop_changelog_url: str,
     ):
         self._logger = logger
         self._steamcmd = steamcmd
-        self._mods = mods
+        self._mods_repository = mods_repository
         self._a3_workshop_dir = a3_workshop_dir
         self._workshop_changelog_url = workshop_changelog_url
 
