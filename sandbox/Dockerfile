@@ -9,6 +9,7 @@ RUN apt-get update && \
         python3 \
         nano \
         pip \
+        rename \
         lib32stdc++6 \
         lib32gcc-s1 \
         libcurl4 \
