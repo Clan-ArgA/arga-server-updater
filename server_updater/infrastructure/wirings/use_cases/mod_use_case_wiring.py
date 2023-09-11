@@ -22,7 +22,7 @@ from server_updater.infrastructure.adapters.mod_sign_key_file_adapter import (
     ModSignKeyFileAdapter,
 )
 from server_updater.infrastructure.adapters.mod_symlink_adapter import ModSymlinkAdapter
-from server_updater.infrastructure.adapters.mods_adapter import ModAdapter
+from server_updater.infrastructure.adapters.mods_adapter import ConstanModAdapter
 from server_updater.infrastructure.adapters.mods_update_adapter import ModsUpdateAdapter
 from server_updater.infrastructure.wirings.steamcmd_wiring import SteamcmdWiring
 
@@ -39,7 +39,7 @@ class ModUseCaseWiring:
     @property
     def _mods_update_service(self) -> ModsUpdateService:
         return ModsUpdateService(
-            mod_update_repository=self._mod_update_repository, mods_repository=ModAdapter()
+            mod_update_repository=self._mod_update_repository, mods_repository=ConstanModAdapter()
         )
 
     @property
@@ -47,7 +47,7 @@ class ModUseCaseWiring:
         return ModsUpdateAdapter(
             logger=LoggerTerminalAdapter(),
             steamcmd=SteamcmdWiring().instantiate(),
-            mods_repository=ModAdapter(),
+            mods_repository=ConstanModAdapter(),
             a3_workshop_dir=A3_WORKSHOP_DIR,
             workshop_changelog_url=WORKSHOP_CHANGELOG_URL,
         )
@@ -56,7 +56,7 @@ class ModUseCaseWiring:
     def _mod_symlink_service(self) -> ModSymlinkService:
         return ModSymlinkService(
             logger=LoggerTerminalAdapter(),
-            mods_repository=ModAdapter(),
+            mods_repository=ConstanModAdapter(),
             mod_symlink_repository=self._mod_symlink_repository,
         )
 
