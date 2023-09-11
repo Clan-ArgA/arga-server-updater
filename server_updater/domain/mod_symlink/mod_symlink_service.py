@@ -24,7 +24,6 @@ class ModSymlinkService:
             response = self._mod_symlink_repository.create(
                 mod_name=mod_name, mod_id=mod_id
             )
-            if response is None:
-                continue
-            self._logger.print(response)
+            if response is not None:
+                self._logger.print(response)
         return True
