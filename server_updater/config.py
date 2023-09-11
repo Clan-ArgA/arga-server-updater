@@ -19,3 +19,4 @@ MOD_KEYS_SOURCE_DIRECTORY = (
     "/home/steam/steamcmd/arma3/steamapps/workshop/content/107410"
 )
 MOD_KEYS_DESTINATION_DIRECTORY = "/home/steam/steamcmd/arma3/keys"
+MOD_JSON_FILE = "server_updater/infrastructure/data/mods.json"
