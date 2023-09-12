@@ -12,6 +12,8 @@ from server_updater.config import (
     A3_WORKSHOP_DIR,
     WORKSHOP_CHANGELOG_URL,
     PATTERN,
+    MOD_KEYS_SOURCE_DIRECTORY,
+    MOD_KEYS_DESTINATION_DIRECTORY,
 )
 from server_updater.constants import UpdateType
 from server_updater.log import Log
@@ -37,9 +39,7 @@ class ServerUpdater:
 
     def _update_server_and_mods(self):
         self._update_server()
-        self._update_mods()
-        self._lower_case_mods()
-        self._create_mod_symlinks()
+        self._update_mods_only()
 
     @staticmethod
     def _input() -> str:
@@ -50,6 +50,7 @@ class ServerUpdater:
                       C: Update Server only
                       D: Create mod symlinks
                       E: Lower case mods
+                      F: Copy key files
                       Q: Quit/Log Out
                       Please enter your choice: """
         )
@@ -58,6 +59,7 @@ class ServerUpdater:
         self._update_mods()
         self._lower_case_mods()
         self._create_mod_symlinks()
+        self._copy_key_files()
 
     def _update_server(self) -> None:
         self._logger.log(f"Updating A3 server ({A3_SERVER_ID})")
@@ -104,6 +106,7 @@ class ServerUpdater:
             "c": self._update_server,
             "d": self._create_mod_symlinks,
             "e": self._lower_case_mods,
+            "f": self._copy_key_files,
             "q": self._quit,
         }
 
@@ -147,3 +150,20 @@ class ServerUpdater:
                 self._logger.log(
                     f"!! Updating {mod_name} failed after {tries} tries !!"
                 )
+
+    def _copy_key_files(self):
+        """Copy the Mods sign files."""
+
+        # Find files with the .bikey extension in the source directory
+        for root_dir, _, files in os.walk(MOD_KEYS_SOURCE_DIRECTORY):
+            for file in files:
+                if not file.endswith(".bikey"):
+                    continue
+                source_file_path = os.path.join(root_dir, file)
+                destination_file_path = os.path.join(
+                    MOD_KEYS_DESTINATION_DIRECTORY, file
+                )
+                # Copy the file to the destination folder
+                shutil.copy(source_file_path, destination_file_path)
+
+        return "Mods sign key files was successfully copied."
