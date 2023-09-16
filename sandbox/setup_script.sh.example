@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd /home/steam/scripts/
+git clone https://github_user:github_token/Clan-ArgA/arga-server-updater.git
+cd arga-server-updater
+git checkout Stage_3_command_and_fastapi
+git pull
+echo "STEAM_USER=user" > ./server_updater/.env
+echo "STEAM_PASS=pass" >> ./server_updater/.env
+pip install --no-cache-dir -r requirements.txt
