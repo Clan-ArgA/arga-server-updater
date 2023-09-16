@@ -35,4 +35,4 @@ RUN mkdir /home/steam/scripts &&  \
 COPY ./setup_script.sh .
 RUN chmod +x setup_script.sh && ./setup_script.sh
 
-CMD ["python3", "/home/steam/scripts/arga-server-updater/server_and_mods_updater.py", "--server=arma3"]
+CMD ["python3", "/home/steam/scripts/arga-server-updater/app_start.py", "--server=reforger"]

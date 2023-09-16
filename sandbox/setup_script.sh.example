@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd /home/steam/scripts/
-git clone https://github_user:github_token/Clan-ArgA/arga-server-updater.git
+git clone https://github_user:github_token@github.com/Clan-ArgA/arga-server-updater.git
 cd arga-server-updater
 git checkout Stage_3_command_and_fastapi
 git pull

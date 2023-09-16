@@ -33,13 +33,8 @@ class ServerUpdater:
     def run(self):
         choices = self._get_choices()
         while True:
-            selected = self._show_options()
+            selected = self._input()
             choices[self._server].get(selected.lower(), self._default)()
-
-    def _show_options(self) -> str:
-        print()
-        print()
-        return self._input()
 
     def _input(self) -> str:
         return input(self._get_input_choices())
