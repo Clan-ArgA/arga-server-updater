@@ -57,12 +57,32 @@ class ServerUpdater:
                       Q: Quit/Log Out
                       Please enter your choice: """,
             Server.REFORGER: """
-                      A: Update Server only
-                      B: Run Reforger server 
+                      A: Update Server and run Reforger
+                      B: Run Reforger server
+                      C: Update Server only
                       Q: Quit/Log Out
                       Please enter your choice: """,
         }
         return input_map[self._server]
+
+    def _get_choices(self) -> Dict[Server, Dict[str, Any]]:
+        return {
+            Server.A3: {
+                "a": self._update_server_and_mods,
+                "b": self._update_mods_only,
+                "c": self._update_server,
+                "d": self._create_mod_symlinks,
+                "e": self._lower_case_mods,
+                "f": self._copy_key_files,
+                "q": self._quit,
+            },
+            Server.REFORGER: {
+                "a": self._update_server_and_run_reforger,
+                "b": self._run_reforger_server,
+                "c": self._update_server,
+                "q": self._quit,
+            },
+        }
 
     def _update_server_and_mods(self):
         self._update_server()
@@ -160,6 +180,10 @@ class ServerUpdater:
 
         return "Mods sign key files was successfully copied."
 
+    def _update_server_and_run_reforger(self):
+        self._update_server()
+        self._run_reforger_server()
+
     @staticmethod
     def _run_reforger_server():
         # https://community.bistudio.com/wiki/Arma_Reforger:Startup_Parameters
@@ -192,24 +216,6 @@ class ServerUpdater:
     def _get_options_to_print(self) -> str:
         options = [o.upper() for o in self._get_choices()[self._server]]
         return f"{', '.join(options[:-1])} or {options[-1]}"
-
-    def _get_choices(self) -> Dict[Server, Dict[str, Any]]:
-        return {
-            Server.A3: {
-                "a": self._update_server_and_mods,
-                "b": self._update_mods_only,
-                "c": self._update_server,
-                "d": self._create_mod_symlinks,
-                "e": self._lower_case_mods,
-                "f": self._copy_key_files,
-                "q": self._quit,
-            },
-            Server.REFORGER: {
-                "a": self._update_server,
-                "b": self._run_reforger_server,
-                "q": self._quit,
-            },
-        }
 
     def _set_config(self):
         if self._server == Server.A3:
