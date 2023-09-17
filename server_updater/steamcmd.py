@@ -2,7 +2,7 @@ import os
 import sys
 from typing import Optional, Dict, Any
 
-from dtos import ServerConfig
+from server_updater.dtos import ServerConfig
 from server_updater.config import (
     STEAM_CMD,
     STEAM_USER,
