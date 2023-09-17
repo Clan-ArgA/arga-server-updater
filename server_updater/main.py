@@ -15,7 +15,7 @@ from server_updater.config import (
     A3_MOD_KEYS_DESTINATION_DIRECTORY,
     WORKSHOP_CHANGELOG_URL,
     PATTERN,
-    REFORGER_SERVER_ID,
+    REFORGER_SERVER_ID, REFORGER_ARMA_BINARY, REFORGER_ARMA_PROFILE, REFORGER_ARMA_MAX_FPS, REFORGER_ARMA_CONFIG,
 )
 from server_updater.constants import UpdateType, Server
 from server_updater.log import Log
@@ -52,6 +52,7 @@ class ServerUpdater:
                       Please enter your choice: """,
             Server.REFORGER: """
                       A: Update Server only
+                      B: Run Reforger server 
                       Q: Quit/Log Out
                       Please enter your choice: """,
         }
@@ -154,16 +155,37 @@ class ServerUpdater:
         return "Mods sign key files was successfully copied."
 
     @staticmethod
+    def _run_reforger_server():
+        # https://community.bistudio.com/wiki/Arma_Reforger:Startup_Parameters
+        launch = " ".join(
+            [
+                REFORGER_ARMA_BINARY,
+                f"-config {REFORGER_ARMA_CONFIG}",
+                "-backendlog",
+                "-nothrow",
+                f"-maxFPS {REFORGER_ARMA_MAX_FPS}",
+                f"-profile {REFORGER_ARMA_PROFILE}",
+                os.environ["ARMA_PARAMS"],
+            ]
+        )
+        print(launch, flush=True)
+        os.system(launch)
+
+    @staticmethod
     def _quit() -> None:
         print("Closing Program now")
         sys.exit()
 
-    @staticmethod
-    def _default() -> None:
+    def _default(self) -> None:
+        options = self._get_options_to_print()
         print()
-        print("You must only select either A,B,C,D,E or Q to quit.")
+        print(f"You must only select either {options} to quit.")
         print("Please try again")
         time.sleep(2)
+
+    def _get_options_to_print(self) -> str:
+        options = [o.upper() for o in self._get_choices()[self._server]]
+        return f"{', '.join(options[:-1])} or {options[-1]}"
 
     def _get_choices(self) -> Dict[Server, Dict[str, Any]]:
         return {
