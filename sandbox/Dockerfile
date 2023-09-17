@@ -28,13 +28,13 @@ RUN mkdir /home/steam/steamcmd &&  \
     cd /home/steam/steamcmd && \
     curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
 
+RUN mkdir /home/steam/steamcmd/reforger
 RUN mkdir /home/steam/steamcmd/reforger/profile
 RUN mkdir /home/steam/steamcmd/reforger/config
-COPY ../server_updater/reforger_server_config.json /home/steam/steamcmd/reforger/config
+#COPY ../server_updater/reforger_server_config.json /home/steam/steamcmd/reforger/config
 
 RUN mkdir /home/steam/scripts &&  \
     cd /home/steam/scripts
-
 
 COPY ./setup_script.sh .
 RUN chmod +x setup_script.sh && ./setup_script.sh

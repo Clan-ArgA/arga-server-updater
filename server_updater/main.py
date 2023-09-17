@@ -173,7 +173,7 @@ class ServerUpdater:
 
     @staticmethod
     def _quit() -> None:
-        print("Closing Program now")
+        print("\nClosing Program now")
         sys.exit()
 
     def _default(self) -> None:
@@ -200,6 +200,7 @@ class ServerUpdater:
             },
             Server.REFORGER: {
                 "a": self._update_server,
+                "b": self._run_reforger_server,
                 "q": self._quit,
             },
         }
