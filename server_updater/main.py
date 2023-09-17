@@ -15,7 +15,11 @@ from server_updater.config import (
     A3_MOD_KEYS_DESTINATION_DIRECTORY,
     WORKSHOP_CHANGELOG_URL,
     PATTERN,
-    REFORGER_SERVER_ID, REFORGER_ARMA_BINARY, REFORGER_ARMA_PROFILE, REFORGER_ARMA_MAX_FPS, REFORGER_ARMA_CONFIG,
+    REFORGER_SERVER_ID,
+    REFORGER_ARMA_BINARY,
+    REFORGER_ARMA_PROFILE,
+    REFORGER_ARMA_MAX_FPS,
+    REFORGER_ARMA_CONFIG,
     REFORGER_ARMA_ARMA_PARAMS,
 )
 from server_updater.constants import UpdateType, Server
@@ -204,7 +208,6 @@ class ServerUpdater:
             os.system(launch)
         except Exception as e:
             print(e)
-
 
     @staticmethod
     def _quit() -> None:
