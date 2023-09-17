@@ -16,6 +16,7 @@ from server_updater.config import (
     WORKSHOP_CHANGELOG_URL,
     PATTERN,
     REFORGER_SERVER_ID, REFORGER_ARMA_BINARY, REFORGER_ARMA_PROFILE, REFORGER_ARMA_MAX_FPS, REFORGER_ARMA_CONFIG,
+    REFORGER_ARMA_ARMA_PARAMS,
 )
 from server_updater.constants import UpdateType, Server
 from server_updater.log import Log
@@ -195,11 +196,15 @@ class ServerUpdater:
                 "-nothrow",
                 f"-maxFPS {REFORGER_ARMA_MAX_FPS}",
                 f"-profile {REFORGER_ARMA_PROFILE}",
-                os.environ["ARMA_PARAMS"],
+                REFORGER_ARMA_ARMA_PARAMS,
             ]
         )
         print(launch, flush=True)
-        os.system(launch)
+        try:
+            os.system(launch)
+        except Exception as e:
+            print(e)
+
 
     @staticmethod
     def _quit() -> None:
