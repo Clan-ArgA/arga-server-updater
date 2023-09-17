@@ -17,8 +17,6 @@ apt-get clean autoclean
 apt-get autoremove -y
 rm -rf /var/lib/apt/lists/*
 
-pip install --no-cache-dir -r requirements.txt
-
 steam_home="/home/steam"
 steamcmd_dir="$steam_home/steamcmd"
 
