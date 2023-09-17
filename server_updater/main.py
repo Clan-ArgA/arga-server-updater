@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Dict, Any
 from urllib import request
 
-from dtos import ServerConfig
+from server_updater.dtos import ServerConfig
 from server_updater.config import (
     A3_SERVER_ID,
     A3_MODS_DIR,
@@ -30,11 +30,17 @@ class ServerUpdater:
         self._server = server
         self._config = self._set_config()
 
-    def run(self):
-        choices = self._get_choices()
+    def run(self) -> None:
         while True:
             selected = self._input()
-            choices[self._server].get(selected.lower(), self._default)()
+            try:
+                self.run_choice(selected=selected)
+            except KeyError:
+                self._default()
+
+    def run_choice(self, selected: str) -> None:
+        choices = self._get_choices()
+        choices[self._server][selected.lower()]()
 
     def _input(self) -> str:
         return input(self._get_input_choices())
@@ -173,7 +179,7 @@ class ServerUpdater:
 
     @staticmethod
     def _quit() -> None:
-        print("\nClosing Program now")
+        print("\nClosing Program now\n")
         sys.exit()
 
     def _default(self) -> None:
@@ -181,7 +187,7 @@ class ServerUpdater:
         print()
         print(f"You must only select either {options} to quit.")
         print("Please try again")
-        time.sleep(2)
+        time.sleep(1)
 
     def _get_options_to_print(self) -> str:
         options = [o.upper() for o in self._get_choices()[self._server]]
