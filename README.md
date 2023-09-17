@@ -1,4 +1,4 @@
-# arga-server-updater
+# ArgA Server Updater
 
 ----
 ## Arma 3
@@ -50,8 +50,7 @@ If there is a steam user
 sudo -iu steam
 ```
 ```bash
-apt-get update
-apt-get install -y --no-install-recommends --no-install-suggests git nano
+apt-get update && apt-get install -y --no-install-recommends --no-install-suggests git nano
 mkdir -p /home/steam/scripts
 cd /home/steam/scripts
 git clone https://github.com/Clan-ArgA/arga-server-updater.git
@@ -67,18 +66,40 @@ run this command: `apt-get install --reinstall ca-certificates`
 
 Replace the steam username and password in the prepare_server.sh file
 ```bash
-cd /home/steam/scripts/arga-server-updater/server_updater/install_tools
-nano prepare_server.sh
-```
-
-Configure the reforger server
-```bash
-cd /home/steam/scripts/arga-server-updater
-nano reforger_server_config.json
+nano /home/steam/scripts/arga-server-updater/server_updater/install_tools/prepare_server.sh
 ```
 
 Prepare the server
 ```bash
-bash prepare_server.sh
+bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/prepare_server.sh
+```
+
+----
+## Install Arma 3 Servers and MODs
+Configure the MOD to use.
+```bash
+nano /home/steam/scripts/arga-server-updater/server_updater/mods.py
+```
+
+Install.
+```bash
+python3 /home/steam/scripts/arga-server-updater/app_start.py --option a
+```
+
+----
+## Install Reforger
+Configure the reforger server
+```bash
+nano /home/steam/scripts/arga-server-updater/reforger_server_config.json
+```
+
+Copy the reforger server config
+```bash
+bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/copy_reforger_config.sh
+```
+
+Install the server
+```bash
+python3 /home/steam/scripts/arga-server-updater/app_start.py --server reforger --option c
 ```
 

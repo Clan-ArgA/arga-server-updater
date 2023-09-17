@@ -12,7 +12,7 @@
 		"password": "ArgA12A",
 		"passwordAdmin": "Ad51472",
 		"scenarioId": "{ECC61978EDCC2B5A}Missions/23_Campaign.conf",
-		"playerCountLimit": 60,
+		"maxPlayers": 64,
 		"visible": true,
 		"crossPlatform": true,
 		"supportedPlatforms": [
