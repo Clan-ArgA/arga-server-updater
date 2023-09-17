@@ -6,45 +6,53 @@ from datetime import datetime
 from typing import Dict, Any
 from urllib import request
 
+from server_updater.dtos import ServerConfig
 from server_updater.config import (
     A3_SERVER_ID,
     A3_MODS_DIR,
     A3_WORKSHOP_DIR,
+    A3_MOD_KEYS_SOURCE_DIRECTORY,
+    A3_MOD_KEYS_DESTINATION_DIRECTORY,
     WORKSHOP_CHANGELOG_URL,
     PATTERN,
-    MOD_KEYS_SOURCE_DIRECTORY,
-    MOD_KEYS_DESTINATION_DIRECTORY,
+    REFORGER_SERVER_ID,
+    REFORGER_ARMA_BINARY,
+    REFORGER_ARMA_PROFILE,
+    REFORGER_ARMA_MAX_FPS,
+    REFORGER_ARMA_CONFIG,
+    REFORGER_ARMA_ARMA_PARAMS,
 )
-from server_updater.constants import UpdateType
+from server_updater.constants import UpdateType, Server
 from server_updater.log import Log
 from server_updater.mods import MODS
 from server_updater.steamcmd import SteamCmd
 
 
 class ServerUpdater:
-    def __init__(self, logger: Log, steamcmd: SteamCmd):
+    def __init__(self, logger: Log, steamcmd: SteamCmd, server: Server):
         self._logger = logger
         self._steamcmd = steamcmd
+        self._server = server
+        self._config = self._set_config()
 
-    def run(self):
-        choices = self._get_choices()
+    def run(self) -> None:
         while True:
-            selected = self._show_options()
-            choices.get(selected.lower(), self._default)()
+            selected = self._input()
+            try:
+                self.run_choice(selected=selected)
+            except KeyError:
+                self._default()
 
-    def _show_options(self) -> str:
-        print()
-        print()
-        return self._input()
+    def run_choice(self, selected: str) -> None:
+        choices = self._get_choices()
+        choices[self._server][selected.lower()]()
 
-    def _update_server_and_mods(self):
-        self._update_server()
-        self._update_mods_only()
+    def _input(self) -> str:
+        return input(self._get_input_choices())
 
-    @staticmethod
-    def _input() -> str:
-        return input(
-            """
+    def _get_input_choices(self) -> str:
+        input_map = {
+            Server.A3: """
                       A: Update server and Mods
                       B: Update Mods only
                       C: Update Server only
@@ -52,8 +60,38 @@ class ServerUpdater:
                       E: Lower case mods
                       F: Copy key files
                       Q: Quit/Log Out
-                      Please enter your choice: """
-        )
+                      Please enter your choice: """,
+            Server.REFORGER: """
+                      A: Update Server and run Reforger
+                      B: Run Reforger server
+                      C: Update Server only
+                      Q: Quit/Log Out
+                      Please enter your choice: """,
+        }
+        return input_map[self._server]
+
+    def _get_choices(self) -> Dict[Server, Dict[str, Any]]:
+        return {
+            Server.A3: {
+                "a": self._update_server_and_mods,
+                "b": self._update_mods_only,
+                "c": self._update_server,
+                "d": self._create_mod_symlinks,
+                "e": self._lower_case_mods,
+                "f": self._copy_key_files,
+                "q": self._quit,
+            },
+            Server.REFORGER: {
+                "a": self._update_server_and_run_reforger,
+                "b": self._run_reforger_server,
+                "c": self._update_server,
+                "q": self._quit,
+            },
+        }
+
+    def _update_server_and_mods(self):
+        self._update_server()
+        self._update_mods_only()
 
     def _update_mods_only(self) -> None:
         self._update_mods()
@@ -62,7 +100,9 @@ class ServerUpdater:
         self._copy_key_files()
 
     def _update_server(self) -> None:
-        self._logger.log(f"Updating A3 server ({A3_SERVER_ID})")
+        self._logger.log(
+            f"Updating {self._server.value} server ({self._config.server_id})"
+        )
         self._steamcmd.run(update_type=UpdateType.SERVER)
 
     def _create_mod_symlinks(self) -> None:
@@ -86,29 +126,6 @@ class ServerUpdater:
                 A3_WORKSHOP_DIR
             )
         )
-
-    @staticmethod
-    def _quit() -> None:
-        print("Closing Program now")
-        sys.exit()
-
-    @staticmethod
-    def _default() -> None:
-        print()
-        print("You must only select either A,B,C,D,E or Q to quit.")
-        print("Please try again")
-        time.sleep(2)
-
-    def _get_choices(self) -> Dict[str, Any]:
-        return {
-            "a": self._update_server_and_mods,
-            "b": self._update_mods_only,
-            "c": self._update_server,
-            "d": self._create_mod_symlinks,
-            "e": self._lower_case_mods,
-            "f": self._copy_key_files,
-            "q": self._quit,
-        }
 
     @staticmethod
     def _mod_needs_update(mod_id, path) -> bool:
@@ -155,15 +172,64 @@ class ServerUpdater:
         """Copy the Mods sign files."""
 
         # Find files with the .bikey extension in the source directory
-        for root_dir, _, files in os.walk(MOD_KEYS_SOURCE_DIRECTORY):
+        for root_dir, _, files in os.walk(A3_MOD_KEYS_SOURCE_DIRECTORY):
             for file in files:
                 if not file.endswith(".bikey"):
                     continue
                 source_file_path = os.path.join(root_dir, file)
                 destination_file_path = os.path.join(
-                    MOD_KEYS_DESTINATION_DIRECTORY, file
+                    A3_MOD_KEYS_DESTINATION_DIRECTORY, file
                 )
                 # Copy the file to the destination folder
                 shutil.copy(source_file_path, destination_file_path)
 
         return "Mods sign key files was successfully copied."
+
+    def _update_server_and_run_reforger(self):
+        self._update_server()
+        self._run_reforger_server()
+
+    @staticmethod
+    def _run_reforger_server():
+        # https://community.bistudio.com/wiki/Arma_Reforger:Startup_Parameters
+        launch = " ".join(
+            [
+                REFORGER_ARMA_BINARY,
+                f"-config {REFORGER_ARMA_CONFIG}",
+                "-backendlog",
+                "-nothrow",
+                f"-maxFPS {REFORGER_ARMA_MAX_FPS}",
+                f"-profile {REFORGER_ARMA_PROFILE}",
+                REFORGER_ARMA_ARMA_PARAMS,
+            ]
+        )
+        print(launch, flush=True)
+        try:
+            os.system(launch)
+        except Exception as e:
+            print(e)
+
+    @staticmethod
+    def _quit() -> None:
+        print("\nClosing Program now\n")
+        sys.exit()
+
+    def _default(self) -> None:
+        options = self._get_options_to_print()
+        print()
+        print(f"You must only select either {options} to quit.")
+        print("Please try again")
+        time.sleep(1)
+
+    def _get_options_to_print(self) -> str:
+        options = [o.upper() for o in self._get_choices()[self._server]]
+        return f"{', '.join(options[:-1])} or {options[-1]}"
+
+    def _set_config(self):
+        if self._server == Server.A3:
+            return ServerConfig(
+                server_id=A3_SERVER_ID,
+            )
+        return ServerConfig(
+            server_id=REFORGER_SERVER_ID,
+        )
