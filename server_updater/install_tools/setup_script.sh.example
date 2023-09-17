@@ -1,10 +1,8 @@
 #!/bin/bash
 
 cd /home/steam/scripts/
-git clone https://github_user:github_token@github.com/Clan-ArgA/arga-server-updater.git
+git clone https://github.com/Clan-ArgA/arga-server-updater.git
 cd arga-server-updater
-git checkout lb_arma3_plus_reforger
-git pull
 echo "STEAM_USER=anonymous" > ./server_updater/.env
 echo "STEAM_PASS=" >> ./server_updater/.env
 pip install --no-cache-dir -r requirements.txt
