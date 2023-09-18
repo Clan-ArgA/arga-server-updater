@@ -90,7 +90,7 @@ python3 /home/steam/scripts/arga-server-updater/app_start.py --option a
 ## Install Reforger
 Configure the reforger server
 ```bash
-nano /home/steam/scripts/arga-server-updater/reforger_server_config.json
+nano /home/steam/scripts/arga-server-updater/server_updater/reforger_server_config.json
 ```
 
 Install the server
