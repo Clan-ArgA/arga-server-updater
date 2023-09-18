@@ -21,6 +21,7 @@ from server_updater.config import (
     REFORGER_ARMA_MAX_FPS,
     REFORGER_ARMA_CONFIG,
     REFORGER_ARMA_ARMA_PARAMS,
+    REFORGER_SERVER_DIR,
 )
 from server_updater.constants import UpdateType, Server
 from server_updater.log import Log
@@ -205,9 +206,9 @@ class ServerUpdater:
         )
         print(launch, flush=True)
         try:
-            os.system(launch)
-        except Exception as e:
-            print(e)
+            os.system(f"(cd {REFORGER_SERVER_DIR} && {launch})")
+        except OSError as e:
+            print(f"Error launching the Reforger server: {e}")
 
     @staticmethod
     def _quit() -> None:
