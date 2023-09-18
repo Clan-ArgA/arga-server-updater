@@ -93,13 +93,13 @@ Configure the reforger server
 nano /home/steam/scripts/arga-server-updater/reforger_server_config.json
 ```
 
-Copy the reforger server config
-```bash
-bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/copy_reforger_config.sh
-```
-
 Install the server
 ```bash
 python3 /home/steam/scripts/arga-server-updater/app_start.py --server reforger --option c
+```
+
+Copy the reforger server config
+```bash
+bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/copy_reforger_config.sh
 ```
 

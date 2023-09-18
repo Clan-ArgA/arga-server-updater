@@ -32,4 +32,3 @@ curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.g
 echo "STEAM_USER=anonymous" > /home/steam/scripts/arga-server-updater/server_updater/.env
 echo "STEAM_PASS=" > /home/steam/scripts/arga-server-updater/server_updater/.env
 
-cp /home/steam/scripts/arga-server-updater/server_updater/reforger_server_config.json /home/steam/steamcmd/reforger/config
