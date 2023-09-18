@@ -43,6 +43,11 @@ Options:
 - B: Run Reforger server
 - C: Update Server only
 
+Example: run reforger server from console
+```text
+python3 app_start.py --server reforger --option b
+```
+
 ----
 ## Install
 If there is a steam user
