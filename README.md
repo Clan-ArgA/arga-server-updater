@@ -108,3 +108,8 @@ Copy the reforger server config
 bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/copy_reforger_config.sh
 ```
 
+----
+To kill Arma Reforger
+```bash
+pkill -f "reforger"
+```
