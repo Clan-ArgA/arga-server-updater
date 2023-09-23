@@ -1,0 +1,52 @@
+{
+	"bindAddress": "0.0.0.0",
+	"bindPort": 2001,
+	"publicAddress": "148.72.155.237",
+	"publicPort": 2001,
+	"a2s": {
+		"address": "148.72.155.237",
+		"port": 17777
+	},
+	"game": {
+		"name": "Clan ArgA Reforger Server",
+		"password": "ArgA12A",
+		"passwordAdmin": "Ad51472",
+		"scenarioId": "{7CA1DE1A11936FB3}Missions/SPECOPS.conf",
+		"maxPlayers": 64,
+		"visible": true,
+		"crossPlatform": true,
+		"supportedPlatforms": [
+			"PLATFORM_PC",
+			"PLATFORM_XBL"
+		],
+		"gameProperties": {
+			"serverMaxViewDistance": 2500,
+			"serverMinGrassDistance": 50,
+			"networkViewDistance": 1000,
+			"disableThirdPerson": true,
+			"fastValidation": true,
+			"battlEye": false,
+			"VONDisableUI": true,
+			"VONDisableDirectSpeechUI": true,
+			"missionHeader": {
+				"m_iPlayerCount": 40,
+				"m_eEditableGameFlags": 6,
+				"m_eDefaultGameFlags": 6,
+				"other": "values"
+			}
+		},
+		"mods": [
+			{
+                "modId": "596A64DB4CF93C20",
+                "name": "SPECIAL OPERATION COOP"
+            },
+            {
+                "modId": "5CDD2CDA6E58EE45",
+                "name": "US Ranger Faction Replacement"
+            }
+		]
+	},
+	"operating": {
+		"lobbyPlayerSynchronise": true
+	}
+}
