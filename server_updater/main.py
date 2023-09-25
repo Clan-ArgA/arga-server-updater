@@ -1,12 +1,12 @@
+import json
 import os
 import shutil
 import sys
 import time
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from urllib import request
 
-from server_updater.dtos import ServerConfig
 from server_updater.config import (
     A3_SERVER_ID,
     A3_MODS_DIR,
@@ -22,18 +22,27 @@ from server_updater.config import (
     REFORGER_ARMA_CONFIG,
     REFORGER_ARMA_ARMA_PARAMS,
     REFORGER_SERVER_DIR,
+    A3_MOD_DEFAULT,
+    A3_MODS_LIST_PATH,
 )
 from server_updater.constants import UpdateType, Server
+from server_updater.dtos import ServerConfig
 from server_updater.log import Log
-from server_updater.mods import MODS
 from server_updater.steamcmd import SteamCmd
 
 
 class ServerUpdater:
-    def __init__(self, logger: Log, steamcmd: SteamCmd, server: Server):
+    def __init__(
+        self,
+        logger: Log,
+        steamcmd: SteamCmd,
+        server: Server,
+        mods_list_name: Optional[str] = None,
+    ):
         self._logger = logger
         self._steamcmd = steamcmd
         self._server = server
+        self._mods = self._get_mods(mods_list_name)
         self._config = self._set_config()
 
     def run(self) -> None:
@@ -108,7 +117,7 @@ class ServerUpdater:
 
     def _create_mod_symlinks(self) -> None:
         self._logger.log("Creating symlinks...")
-        for mod_name, mod_id in MODS.items():
+        for mod_name, mod_id in self._mods.items():
             link_path = f"{A3_MODS_DIR}/{mod_name}"
             real_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
 
@@ -143,7 +152,7 @@ class ServerUpdater:
         return updated_at >= created_at
 
     def _update_mods(self) -> None:
-        for mod_name, mod_id in MODS.items():
+        for mod_name, mod_id in self._mods.items():
             path = f"{A3_WORKSHOP_DIR}/{mod_id}"
 
             # Check if mod needs to be updated
@@ -159,7 +168,7 @@ class ServerUpdater:
             tries = 0
             while os.path.isdir(path) is False and tries < 10:
                 self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
-                self._steamcmd.run(update_type=UpdateType.MOD, mod_id=mod_id)
+                self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
                 # Sleep for a bit so that we can kill the script if needed
                 time.sleep(5)
                 tries += 1
@@ -234,3 +243,16 @@ class ServerUpdater:
         return ServerConfig(
             server_id=REFORGER_SERVER_ID,
         )
+
+    def _get_mods(
+        self, mods_list_name: Optional[str] = None
+    ) -> Optional[Dict[str, str]]:
+        if self._server == Server.REFORGER:
+            return None
+        if mods_list_name is None:
+            mods_list_name = A3_MOD_DEFAULT
+
+        file_name = f"{A3_MODS_LIST_PATH}/{mods_list_name}.json"
+
+        with open(file_name, "r") as file:
+            return json.load(file)

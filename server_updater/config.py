@@ -21,6 +21,10 @@ A3_MOD_KEYS_SOURCE_DIRECTORY = (
     f"{A3_SERVER_DIR}/steamapps/workshop/content/{A3_WORKSHOP_ID}"
 )
 A3_MOD_KEYS_DESTINATION_DIRECTORY = f"{A3_SERVER_DIR}/keys"
+A3_MODS_LIST_PATH = (
+    "/home/steam/scripts/arga-server-updater/server_updater/arma3_mods_list"
+)
+A3_MOD_DEFAULT = "arga"
 
 REFORGER_SERVER_ID = "1874900"
 REFORGER_SERVER_DIR = "/home/steam/steamcmd/reforger"
