@@ -23,6 +23,17 @@ Options:
 - E: Lower case mods
 - F: Copy key files
 
+IMPORTANT: When executing the menus referring to MODs, 
+only the file that is defined in the A3_MOD_DEFAULT constant of the config.py file is processed.
+
+To install or update another list of MODs you must use the following command:
+```bash
+python3 app_start.py --mod xxxx
+```
+
+The xxxx file name must be placed without the .json extension. 
+The file must have been previously created.
+
 ----
 ## Reforger
 ### To run updater
@@ -81,10 +92,21 @@ bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/prepar
 
 ----
 ## Install Arma 3 Servers and MODs
-Configure the MOD to use.
+Create at least one file with the list of MODs that will be used on the server. 
+The file name must be xxxx.json. There must exist a file with the name xxxx defined in A3_MOD_DEFAULT.
 ```bash
-nano /home/steam/scripts/arga-server-updater/server_updater/mods.py
+nano /home/steam/scripts/arga-server-updater/server_updater/arma3_mods_list/xxxx.json
 ```
+Format:
+```json
+{
+    "@mod_name": "mod_workshop_id",
+    "@mod_name_2": "mod_workshop_id_2"
+}
+```
+Names must be lowercase preceded by @.
+The last line should not have a comma at the end.
+
 
 Install.
 ```bash
