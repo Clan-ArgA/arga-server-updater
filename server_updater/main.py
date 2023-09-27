@@ -152,27 +152,27 @@ class ServerUpdater:
         return updated_at >= created_at
 
     def _update_mods(self) -> None:
-        max_tries = 10
         for mod_name, mod_id in self._mods.items():
             mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
-            if self._update_mod_if_needed(mod_name, mod_id, mod_path):
+            if self._delete_mod_if_needed(mod_name, mod_id, mod_path):
+                print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 continue
-            tries = 0
-            while os.path.isdir(mod_path) is False and tries < 10:
-                self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
-                self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
-                # Sleep for a bit so that we can kill the script if needed
-                time.sleep(5)
-                tries += 1
+            self._try_to_update_mod(mod_id, mod_name, mod_path)
 
-            if tries >= max_tries:
-                self._logger.log(
-                    f"!! Updating {mod_name} failed after {tries} tries !!"
-                )
+    def _try_to_update_mod(self, mod_id: str, mod_name: str, mod_path: str) -> None:
+        tries = 0
+        max_tries = 10
+        while os.path.isdir(mod_path) is False and tries < 10:
+            self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
+            self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
+            time.sleep(5)
+            tries += 1
 
-    def _update_mod_if_needed(self, mod_name: str, mod_id: str, mod_path: str) -> bool:
+        if tries >= max_tries:
+            self._logger.log(f"!! Updating {mod_name} failed after {tries} tries !!")
+
+    def _delete_mod_if_needed(self, mod_name: str, mod_id: str, mod_path: str) -> bool:
         if not os.path.isdir(mod_path) or not self._mod_needs_update(mod_id, mod_path):
-            print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
             return False
         shutil.rmtree(mod_path)
         return True
@@ -180,7 +180,7 @@ class ServerUpdater:
     def _copy_key_files(self):
         """Copy the Mods sign files."""
 
-        # Find files with the .bikey extension in the source directory
+        print("Start copy of Mods sign key files...")
         for root_dir, _, files in os.walk(A3_MOD_KEYS_SOURCE_DIRECTORY):
             for file in files:
                 if not file.endswith(".bikey"):
@@ -189,10 +189,9 @@ class ServerUpdater:
                 destination_file_path = os.path.join(
                     A3_MOD_KEYS_DESTINATION_DIRECTORY, file
                 )
-                # Copy the file to the destination folder
                 shutil.copy(source_file_path, destination_file_path)
 
-        return "Mods sign key files was successfully copied."
+        print("Mods sign key files was successfully copied.")
 
     def _update_server_and_run_reforger(self):
         self._update_server()
