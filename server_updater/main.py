@@ -106,6 +106,9 @@ class ServerUpdater:
     def _update_mods_only(self) -> None:
         mods_to_update = self._get_mods(self._mods_list_name)
         updated_mods = self._update_mods(mods_to_update)
+        if updated_mods is None:
+            self._logger.log("All MODs are updated")
+            return None
         self._lower_case_mods(updated_mods)
         self._create_mod_symlinks(updated_mods)
         self._copy_key_files(updated_mods)
@@ -159,7 +162,7 @@ class ServerUpdater:
         created_at = datetime.fromtimestamp(os.path.getctime(path))
         return updated_at >= created_at
 
-    def _update_mods(self, mods_to_update: Dict[str, str]) -> Dict[str, str]:
+    def _update_mods(self, mods_to_update: Dict[str, str]) -> Optional[Dict[str, str]]:
         updated_mods = {}
         for mod_name, mod_id in mods_to_update.items():
             mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
@@ -168,7 +171,7 @@ class ServerUpdater:
                 continue
             if self._try_to_update_mod(mod_id, mod_name, mod_path):
                 updated_mods[mod_name] = mod_id
-        return updated_mods
+        return updated_mods if updated_mods != {} else None
 
     def _try_to_update_mod(self, mod_id: str, mod_name: str, mod_path: str) -> bool:
         tries = 0
