@@ -3,6 +3,7 @@
 apt-get update
 apt-get install -y --no-install-recommends --no-install-suggests \
     curl \
+    git \
     python3 \
     nano \
     pip \
@@ -17,12 +18,8 @@ apt-get clean autoclean
 apt-get autoremove -y
 rm -rf /var/lib/apt/lists/*
 
-steam_home="/home/steam"
-steamcmd_dir="$steam_home/steamcmd"
+steamcmd_dir="/home/steam/steamcmd"
 
-if [ ! -d "$steam_home" ]; then
-    mkdir -p "$steam_home"
-fi
 if [ ! -d "$steamcmd_dir" ]; then
     mkdir -p "$steamcmd_dir"
 fi

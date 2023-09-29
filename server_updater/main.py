@@ -4,7 +4,7 @@ import shutil
 import sys
 import time
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Tuple
 from urllib import request
 
 from server_updater.config import (
@@ -42,7 +42,7 @@ class ServerUpdater:
         self._logger = logger
         self._steamcmd = steamcmd
         self._server = server
-        self._mods = self._get_mods(mods_list_name)
+        self._mods_list_name = mods_list_name
         self._config = self._set_config()
 
     def run(self) -> None:
@@ -104,10 +104,15 @@ class ServerUpdater:
         self._update_mods_only()
 
     def _update_mods_only(self) -> None:
-        self._update_mods()
-        self._lower_case_mods()
-        self._create_mod_symlinks()
-        self._copy_key_files()
+        mods_to_update = self._get_mods(self._mods_list_name)
+        updated_mods = self._update_mods(mods_to_update)
+        if updated_mods is None:
+            self._logger.log("All MODs are updated")
+            print()
+            return None
+        self._lower_case_mods(updated_mods)
+        self._create_mod_symlinks(updated_mods)
+        self._copy_key_files(updated_mods)
 
     def _update_server(self) -> None:
         self._logger.log(
@@ -115,9 +120,9 @@ class ServerUpdater:
         )
         self._steamcmd.run(update_type=UpdateType.SERVER)
 
-    def _create_mod_symlinks(self) -> None:
+    def _create_mod_symlinks(self, updated_mods: Dict[str, str]) -> None:
         self._logger.log("Creating symlinks...")
-        for mod_name, mod_id in self._mods.items():
+        for mod_name, mod_id in updated_mods.items():
             link_path = f"{A3_MODS_DIR}/{mod_name}"
             real_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
 
@@ -128,14 +133,22 @@ class ServerUpdater:
                 continue
             os.symlink(real_path, link_path)
             print(f"Creating symlink '{link_path}'...")
+        print()
 
-    def _lower_case_mods(self) -> None:
+    def _lower_case_mods(self, updated_mods: Dict[str, str]) -> None:
         self._logger.log("Converting uppercase files/folders to lowercase...")
-        os.system(
-            "(cd {} && find . -depth -exec rename -v 's/(.*)\/([^\/]*)/$1\/\L$2/' {{}} \;)".format(
-                A3_WORKSHOP_DIR
-            )
-        )
+        for value in updated_mods.values():
+            directory_path = f"{A3_WORKSHOP_DIR}/{value}"
+            for root, dirs, files in os.walk(directory_path):
+                for filename in files + dirs:
+                    new_name = os.path.join(root, filename).lower()
+                    if new_name == os.path.join(root, filename):
+                        continue
+                    try:
+                        os.rename(os.path.join(root, filename), new_name)
+                        print(f'Renamed: {filename} -> {new_name}')
+                    except OSError as e:
+                        print(f'Error renaming {filename}: {e}')
 
     @staticmethod
     def _mod_needs_update(mod_id, path) -> bool:
@@ -151,49 +164,64 @@ class ServerUpdater:
         created_at = datetime.fromtimestamp(os.path.getctime(path))
         return updated_at >= created_at
 
-    def _update_mods(self) -> None:
-        for mod_name, mod_id in self._mods.items():
-            path = f"{A3_WORKSHOP_DIR}/{mod_id}"
+    def _update_mods(self, mods_to_update: Dict[str, str]) -> Optional[Dict[str, str]]:
+        updated_mods = {}
+        for mod_name, mod_id in mods_to_update.items():
+            mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
+            is_dir, mod_needs_update = self._delete_mod_if_needed(mod_id=mod_id, mod_path=mod_path)
+            if is_dir and not mod_needs_update:
+                print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
+                continue
+            if self._try_to_update_mod(mod_id=mod_id, mod_name=mod_name, is_dir=is_dir):
+                updated_mods[mod_name] = mod_id
+        return updated_mods if updated_mods != {} else None
 
-            # Check if mod needs to be updated
-            if os.path.isdir(path):
-                if self._mod_needs_update(mod_id, path):
-                    # Delete existing folder so that we can verify whether the download succeeded
-                    shutil.rmtree(path)
-                else:
-                    print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
-                    continue
+    def _try_to_update_mod(self, mod_id: str, mod_name: str, is_dir: bool) -> bool:
+        tries = 0
+        max_tries = 10
+        while not is_dir and tries < 10:
+            self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
+            self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
+            time.sleep(5)
+            tries += 1
 
-            # Keep trying until the download actually succeeded
-            tries = 0
-            while os.path.isdir(path) is False and tries < 10:
-                self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
-                self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
-                # Sleep for a bit so that we can kill the script if needed
-                time.sleep(5)
-                tries += 1
+        if tries >= max_tries:
+            self._logger.log(f"!! Updating {mod_name} failed after {tries} tries !!")
+            return False
+        return True
 
-            if tries >= 10:
-                self._logger.log(
-                    f"!! Updating {mod_name} failed after {tries} tries !!"
-                )
+    def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> Tuple[bool, bool]:
+        is_dir = os.path.isdir(mod_path)
+        mod_needs_update = self._mod_needs_update(mod_id, mod_path)
+        if not is_dir:
+            return False, False
+        if not mod_needs_update:
+            return True, False
+        shutil.rmtree(mod_path)
+        return True, True
 
-    def _copy_key_files(self):
+    def _copy_key_files(self, updated_mods: Dict[str, str]) -> None:
         """Copy the Mods sign files."""
+        self._logger.log("Start copy of Mods sign key files...")
+        was_copied = False
+        for value in updated_mods.values():
+            directory_path = f"{A3_MOD_KEYS_SOURCE_DIRECTORY}/{value}"
+            for root_dir, _, files in os.walk(directory_path):
+                for file in files:
+                    if not file.endswith(".bikey"):
+                        continue
+                    source_file_path = os.path.join(root_dir, file)
+                    destination_file_path = os.path.join(
+                        A3_MOD_KEYS_DESTINATION_DIRECTORY, file
+                    )
+                    print(f"Copy {file} file")
+                    shutil.copy(source_file_path, destination_file_path)
+                    was_copied = True
 
-        # Find files with the .bikey extension in the source directory
-        for root_dir, _, files in os.walk(A3_MOD_KEYS_SOURCE_DIRECTORY):
-            for file in files:
-                if not file.endswith(".bikey"):
-                    continue
-                source_file_path = os.path.join(root_dir, file)
-                destination_file_path = os.path.join(
-                    A3_MOD_KEYS_DESTINATION_DIRECTORY, file
-                )
-                # Copy the file to the destination folder
-                shutil.copy(source_file_path, destination_file_path)
-
-        return "Mods sign key files was successfully copied."
+        if not was_copied:
+            print("There are no MODs sign key files to copy\n")
+            return None
+        print("MODs sign key files was successfully copied.\n")
 
     def _update_server_and_run_reforger(self):
         self._update_server()
