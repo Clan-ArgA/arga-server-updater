@@ -106,6 +106,7 @@ class ServerUpdater:
     def _update_mods_only(self) -> None:
         mods_to_update = self._get_mods(self._mods_list_name)
         updated_mods = self._update_mods(mods_to_update)
+        print(f"updated_mods: {updated_mods}")
         if updated_mods is None:
             self._logger.log("All MODs are updated")
             return None
