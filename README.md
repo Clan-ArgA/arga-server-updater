@@ -108,9 +108,14 @@ Names must be lowercase preceded by @.
 The last line should not have a comma at the end.
 
 
-Install.
+Install server and default list MODs.
 ```bash
 python3 /home/steam/scripts/arga-server-updater/app_start.py --option a
+```
+
+Install a specific list MODs only.
+```bash
+python3 /home/steam/scripts/arga-server-updater/app_start.py --option b --mods xxxx
 ```
 
 ----
