@@ -109,6 +109,7 @@ class ServerUpdater:
         print(f"updated_mods: {updated_mods}")
         if updated_mods is None:
             self._logger.log("All MODs are updated")
+            print()
             return None
         self._lower_case_mods(updated_mods)
         self._create_mod_symlinks(updated_mods)
@@ -195,9 +196,6 @@ class ServerUpdater:
     def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> Tuple[bool, bool]:
         is_dir = os.path.isdir(mod_path)
         mod_needs_update = self._mod_needs_update(mod_id, mod_path)
-        print(f"is_dir: {is_dir}")
-        print(f"mod_needs_update: {mod_needs_update}")
-        print(f"if: {not is_dir or not mod_needs_update}")
         if not is_dir:
             return False, False
         if not self._mod_needs_update(mod_id, mod_path):
