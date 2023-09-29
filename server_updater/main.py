@@ -106,7 +106,6 @@ class ServerUpdater:
     def _update_mods_only(self) -> None:
         mods_to_update = self._get_mods(self._mods_list_name)
         updated_mods = self._update_mods(mods_to_update)
-        print(f"updated_mods: {updated_mods}")
         if updated_mods is None:
             self._logger.log("All MODs are updated")
             print()
@@ -163,8 +162,6 @@ class ServerUpdater:
             return False
         updated_at = datetime.fromtimestamp(int(match.group(1)))
         created_at = datetime.fromtimestamp(os.path.getctime(path))
-        print(f"\nupdated_at: {updated_at} - created_at: {created_at}")
-        print(f"compare: {updated_at >= created_at}\n")
         return updated_at >= created_at
 
     def _update_mods(self, mods_to_update: Dict[str, str]) -> Optional[Dict[str, str]]:
