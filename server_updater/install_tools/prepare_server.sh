@@ -3,6 +3,7 @@
 apt-get update
 apt-get install -y --no-install-recommends --no-install-suggests \
     curl \
+    git \
     python3 \
     nano \
     pip \

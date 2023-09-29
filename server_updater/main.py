@@ -133,6 +133,7 @@ class ServerUpdater:
                 continue
             os.symlink(real_path, link_path)
             print(f"Creating symlink '{link_path}'...")
+        print()
 
     def _lower_case_mods(self, updated_mods: Dict[str, str]) -> None:
         self._logger.log("Converting uppercase files/folders to lowercase...")
@@ -191,6 +192,11 @@ class ServerUpdater:
         return True
 
     def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> bool:
+        is_dir = os.path.isdir(mod_path)
+        mod_needs_update = self._mod_needs_update(mod_id, mod_path)
+        print(f"is_dir: {is_dir}")
+        print(f"mod_needs_update: {mod_needs_update}")
+        print(f"if: {not is_dir or not mod_needs_update}")
         if not os.path.isdir(mod_path) or not self._mod_needs_update(mod_id, mod_path):
             return False
         shutil.rmtree(mod_path)
@@ -215,7 +221,7 @@ class ServerUpdater:
                     was_copied = True
 
         if not was_copied:
-            print("There are no MODs sign key files to copy")
+            print("There are no MODs sign key files to copy\n")
             return None
         print("MODs sign key files was successfully copied.\n")
 
