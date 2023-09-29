@@ -172,14 +172,14 @@ class ServerUpdater:
             if is_dir and not mod_needs_update:
                 print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 continue
-            if self._try_to_update_mod(mod_id, mod_name, mod_path):
+            if self._try_to_update_mod(mod_id=mod_id, mod_name=mod_name, is_dir=is_dir):
                 updated_mods[mod_name] = mod_id
         return updated_mods if updated_mods != {} else None
 
-    def _try_to_update_mod(self, mod_id: str, mod_name: str, mod_path: str) -> bool:
+    def _try_to_update_mod(self, mod_id: str, mod_name: str, is_dir: bool) -> bool:
         tries = 0
         max_tries = 10
-        while os.path.isdir(mod_path) is False and tries < 10:
+        while not is_dir and tries < 10:
             self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
             self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
             time.sleep(5)
