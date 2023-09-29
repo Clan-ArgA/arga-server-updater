@@ -192,7 +192,7 @@ class ServerUpdater:
 
     def _copy_key_files(self, updated_mods: Dict[str, str]) -> None:
         """Copy the Mods sign files."""
-        print("Start copy of Mods sign key files...")
+        self._logger.log("Start copy of Mods sign key files...")
         for value in updated_mods.values():
             directory_path = f"{A3_MOD_KEYS_SOURCE_DIRECTORY}/{value}"
             for root_dir, _, files in os.walk(directory_path):
