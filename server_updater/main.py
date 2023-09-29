@@ -4,7 +4,7 @@ import shutil
 import sys
 import time
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Tuple
 from urllib import request
 
 from server_updater.config import (
@@ -170,7 +170,8 @@ class ServerUpdater:
         updated_mods = {}
         for mod_name, mod_id in mods_to_update.items():
             mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
-            if self._delete_mod_if_needed(mod_id=mod_id, mod_path=mod_path):
+            is_dir, mod_needs_update = self._delete_mod_if_needed(mod_id=mod_id, mod_path=mod_path)
+            if is_dir and not mod_needs_update:
                 print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 continue
             if self._try_to_update_mod(mod_id, mod_name, mod_path):
@@ -191,16 +192,18 @@ class ServerUpdater:
             return False
         return True
 
-    def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> bool:
+    def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> Tuple[bool, bool]:
         is_dir = os.path.isdir(mod_path)
         mod_needs_update = self._mod_needs_update(mod_id, mod_path)
         print(f"is_dir: {is_dir}")
         print(f"mod_needs_update: {mod_needs_update}")
         print(f"if: {not is_dir or not mod_needs_update}")
-        if not os.path.isdir(mod_path) or not self._mod_needs_update(mod_id, mod_path):
-            return False
+        if not is_dir:
+            return False, False
+        if not self._mod_needs_update(mod_id, mod_path):
+            return True, False
         shutil.rmtree(mod_path)
-        return True
+        return True, True
 
     def _copy_key_files(self, updated_mods: Dict[str, str]) -> None:
         """Copy the Mods sign files."""
