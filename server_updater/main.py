@@ -161,7 +161,8 @@ class ServerUpdater:
             return False
         updated_at = datetime.fromtimestamp(int(match.group(1)))
         created_at = datetime.fromtimestamp(os.path.getctime(path))
-        print(f"updated_at: {updated_at} - created_at: {created_at}")
+        print(f"\nupdated_at: {updated_at} - created_at: {created_at}")
+        print(f"compare: {updated_at >= created_at}\n")
         return updated_at >= created_at
 
     def _update_mods(self, mods_to_update: Dict[str, str]) -> Optional[Dict[str, str]]:
