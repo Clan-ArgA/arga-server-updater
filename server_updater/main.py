@@ -195,7 +195,7 @@ class ServerUpdater:
         mod_needs_update = self._mod_needs_update(mod_id, mod_path)
         if not is_dir:
             return False, False
-        if not self._mod_needs_update(mod_id, mod_path):
+        if not mod_needs_update:
             return True, False
         shutil.rmtree(mod_path)
         return True, True
