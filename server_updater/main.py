@@ -161,6 +161,7 @@ class ServerUpdater:
             return False
         updated_at = datetime.fromtimestamp(int(match.group(1)))
         created_at = datetime.fromtimestamp(os.path.getctime(path))
+        print(f"updated_at: {updated_at} - created_at: {created_at}")
         return updated_at >= created_at
 
     def _update_mods(self, mods_to_update: Dict[str, str]) -> Optional[Dict[str, str]]:
@@ -197,6 +198,7 @@ class ServerUpdater:
     def _copy_key_files(self, updated_mods: Dict[str, str]) -> None:
         """Copy the Mods sign files."""
         self._logger.log("Start copy of Mods sign key files...")
+        was_copied = False
         for value in updated_mods.values():
             directory_path = f"{A3_MOD_KEYS_SOURCE_DIRECTORY}/{value}"
             for root_dir, _, files in os.walk(directory_path):
@@ -209,8 +211,12 @@ class ServerUpdater:
                     )
                     print(f"Copy {file} file")
                     shutil.copy(source_file_path, destination_file_path)
+                    was_copied = True
 
-        print("Mods sign key files was successfully copied.")
+        if not was_copied:
+            print("There are no MODs sign key files to copy")
+            return None
+        print("MODs sign key files was successfully copied.\n")
 
     def _update_server_and_run_reforger(self):
         self._update_server()
