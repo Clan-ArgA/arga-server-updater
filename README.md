@@ -66,7 +66,7 @@ If there is a steam user
 sudo -iu steam
 ```
 ```bash
-apt-get update && apt-get install -y --no-install-recommends --no-install-suggests git nano
+apt-get update && apt-get install -y --no-install-recommends --no-install-suggests git nano python3 pip
 mkdir -p /home/steam/scripts
 cd /home/steam/scripts
 git clone https://github.com/Clan-ArgA/arga-server-updater.git
