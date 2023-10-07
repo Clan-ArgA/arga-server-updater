@@ -2,26 +2,29 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from server_updater.config import STEAM_USER, STEAM_PASS
-from server_updater.constants import UpdateType
+from server_updater.constants import UpdateType, Server
 from server_updater.steamcmd import SteamCmd
 
 
+@patch("os.system")
 class SteamCmdTest(TestCase):
     def setUp(self) -> None:
-        self._expected = "/home/steam/steamcmd/steamcmd.sh  "
-        self._expected += "+force_install_dir /home/steam/steamcmd/arma3"
-        self._expected += f" +login {STEAM_USER} {STEAM_PASS}"
+        self._expected = (
+            f"/home/steam/steamcmd/steamcmd.sh  "
+            f"+force_install_dir /home/steam/steamcmd/arma3 "
+            f"+login {STEAM_USER} {STEAM_PASS}"
+        )
 
-    @patch("os.system")
-    def test_steamcmd_server(self, mock_system):
+    def test_a3_steamcmd_server(self, mock_system):
         expected = f"{self._expected} +app_update 233780 validate +quit"
-        steamcmd = SteamCmd()
+        steamcmd = SteamCmd(server=Server.A3)
         steamcmd.run(update_type=UpdateType.SERVER)
         mock_system.assert_called_with(expected)
 
-    @patch("os.system")
-    def test_steamcmd_mod(self, mock_system):
-        expected = f"{self._expected} +workshop_download_item 107410 15 validate +quit"
-        steamcmd = SteamCmd()
-        steamcmd.run(update_type=UpdateType.MOD, mod_id=15)
+    def test_a3_steamcmd_mod(self, mock_system):
+        expected = (
+            f"{self._expected} +workshop_download_item 107410 620260972 validate +quit"
+        )
+        steamcmd = SteamCmd(server=Server.A3)
+        steamcmd.run(update_type=UpdateType.MOD, mod_id=620260972)
         mock_system.assert_called_with(expected)
