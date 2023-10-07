@@ -146,9 +146,9 @@ class ServerUpdater:
                         continue
                     try:
                         os.rename(os.path.join(root, filename), new_name)
-                        print(f'Renamed: {filename} -> {new_name}')
+                        print(f"Renamed: {filename} -> {new_name}")
                     except OSError as e:
-                        print(f'Error renaming {filename}: {e}')
+                        print(f"Error renaming {filename}: {e}")
 
     @staticmethod
     def _mod_needs_update(mod_id, path) -> bool:
@@ -164,19 +164,30 @@ class ServerUpdater:
         created_at = datetime.fromtimestamp(os.path.getctime(path))
         return updated_at >= created_at
 
-    def _update_mods(self, mods_to_update: Dict[str, str], time_sleep: Optional[int] = 5) -> Optional[Dict[str, str]]:
+    def _update_mods(
+        self, mods_to_update: Dict[str, str], time_sleep: Optional[int] = 5
+    ) -> Optional[Dict[str, str]]:
         updated_mods = {}
         for mod_name, mod_id in mods_to_update.items():
             mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
-            is_dir, mod_needs_update = self._delete_mod_if_needed(mod_id=mod_id, mod_path=mod_path)
+            is_dir, mod_needs_update = self._delete_mod_if_needed(
+                mod_id=mod_id, mod_path=mod_path
+            )
             if is_dir and not mod_needs_update:
                 print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 continue
-            if self._try_to_update_mod(mod_id=mod_id, mod_name=mod_name, mod_path=mod_path, time_sleep=time_sleep):
+            if self._try_to_update_mod(
+                mod_id=mod_id,
+                mod_name=mod_name,
+                mod_path=mod_path,
+                time_sleep=time_sleep,
+            ):
                 updated_mods[mod_name] = mod_id
         return updated_mods if updated_mods != {} else None
 
-    def _try_to_update_mod(self, mod_id: str, mod_name: str, mod_path: str, time_sleep: int) -> bool:
+    def _try_to_update_mod(
+        self, mod_id: str, mod_name: str, mod_path: str, time_sleep: int
+    ) -> bool:
         tries = 0
         max_tries = 10
         while not os.path.isdir(mod_path) and tries < max_tries:

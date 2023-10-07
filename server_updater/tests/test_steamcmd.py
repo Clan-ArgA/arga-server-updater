@@ -22,7 +22,9 @@ class SteamCmdTest(TestCase):
         mock_system.assert_called_with(expected)
 
     def test_a3_steamcmd_mod(self, mock_system):
-        expected = f"{self._expected} +workshop_download_item 107410 620260972 validate +quit"
+        expected = (
+            f"{self._expected} +workshop_download_item 107410 620260972 validate +quit"
+        )
         steamcmd = SteamCmd(server=Server.A3)
         steamcmd.run(update_type=UpdateType.MOD, mod_id=620260972)
         mock_system.assert_called_with(expected)
