@@ -164,7 +164,7 @@ class ServerUpdater:
         created_at = datetime.fromtimestamp(os.path.getctime(path))
         return updated_at >= created_at
 
-    def _update_mods(self, mods_to_update: Dict[str, str]) -> Optional[Dict[str, str]]:
+    def _update_mods(self, mods_to_update: Dict[str, str], time_sleep: Optional[int] = 5) -> Optional[Dict[str, str]]:
         updated_mods = {}
         for mod_name, mod_id in mods_to_update.items():
             mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
@@ -172,14 +172,14 @@ class ServerUpdater:
             if is_dir and not mod_needs_update:
                 print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 continue
-            if self._try_to_update_mod(mod_id=mod_id, mod_name=mod_name, mod_path=mod_path, time_sleep=5):
+            if self._try_to_update_mod(mod_id=mod_id, mod_name=mod_name, mod_path=mod_path, time_sleep=time_sleep):
                 updated_mods[mod_name] = mod_id
         return updated_mods if updated_mods != {} else None
 
     def _try_to_update_mod(self, mod_id: str, mod_name: str, mod_path: str, time_sleep: int) -> bool:
         tries = 0
         max_tries = 10
-        while not os.path.isdir(mod_path) and tries < 10:
+        while not os.path.isdir(mod_path) and tries < max_tries:
             self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
             self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
             time.sleep(time_sleep)
@@ -191,11 +191,9 @@ class ServerUpdater:
         return True
 
     def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> Tuple[bool, bool]:
-        is_dir = os.path.isdir(mod_path)
-        mod_needs_update = self._mod_needs_update(mod_id, mod_path)
-        if not is_dir:
+        if not os.path.isdir(mod_path):
             return False, False
-        if not mod_needs_update:
+        if not self._mod_needs_update(mod_id, mod_path):
             return True, False
         shutil.rmtree(mod_path)
         return True, True
