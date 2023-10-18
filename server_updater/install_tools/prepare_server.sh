@@ -26,6 +26,4 @@ fi
 cd /home/steam/steamcmd
 curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
 
-echo "STEAM_USER=anonymous" > /home/steam/scripts/arga-server-updater/server_updater/.env
-echo "STEAM_PASS=" > /home/steam/scripts/arga-server-updater/server_updater/.env
-
+echo -e "STEAM_USER=user\nSTEAM_PASS=pass" > /home/steam/scripts/arga-server-updater/server_updater/.env
