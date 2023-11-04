@@ -7,15 +7,18 @@ from server_updater.main import ServerUpdater
 from server_updater.steamcmd import SteamCmd
 
 
-def run_in_terminal(
-    server: Server, option: Optional[str] = None, mods_list_name: Optional[str] = None
+def select_run_mode(
+    server: Server, option: Optional[str] = None, mods_list_name: Optional[str] = None, repair: Optional[str] = None
 ) -> None:
     server_updater = ServerUpdater(
         logger=Log(),
         steamcmd=SteamCmd(server=server),
         server=server,
         mods_list_name=mods_list_name,
+        repair=repair
     )
+    if repair is not None:
+        return server_updater.repair_arma3_mod()
     if option is not None:
         return run_by_command(option, server_updater)
     server_updater.run()
@@ -48,6 +51,10 @@ def get_parser() -> argparse.ArgumentParser:
         default=None,
         help="To run an option directly",
     )
+    parser.add_argument(
+        "--repair",
+        help="Reinstall the specified mod.",
+    )
     return parser
 
 
@@ -63,7 +70,7 @@ def main() -> None:
     args = parser.parse_args()
     server = get_server_map()[args.server]
     mods_list = args.mods if server == Server.A3 else None
-    run_in_terminal(server=server, option=args.option, mods_list_name=mods_list)
+    select_run_mode(server=server, option=args.option, mods_list_name=mods_list)
 
 
 if __name__ == "__main__":

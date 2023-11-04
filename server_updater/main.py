@@ -1,7 +1,6 @@
 import json
 import os
 import shutil
-import sys
 import time
 from datetime import datetime
 from typing import Dict, Any, Optional, Tuple
@@ -38,11 +37,13 @@ class ServerUpdater:
         steamcmd: SteamCmd,
         server: Server,
         mods_list_name: Optional[str] = None,
+        repair: Optional[str] = None,
     ):
         self._logger = logger
         self._steamcmd = steamcmd
         self._server = server
         self._mods_list_name = mods_list_name
+        self._repair = repair
         self._config = self._set_config()
 
     def run(self) -> None:
@@ -56,6 +57,9 @@ class ServerUpdater:
     def run_choice(self, selected: str) -> None:
         choices = self._get_choices()
         choices[self._server][selected.lower()]()
+
+    def repair_arma3_mod(self):
+        self._update_mods_only()
 
     def _input(self) -> str:
         return input(self._get_input_choices())
@@ -104,7 +108,7 @@ class ServerUpdater:
         self._update_mods_only()
 
     def _update_mods_only(self) -> None:
-        mods_to_update = self._get_mods(self._mods_list_name)
+        mods_to_update = self._get_mods_to_update()
         updated_mods = self._update_mods(mods_to_update)
         if updated_mods is None:
             self._logger.log("All MODs are updated")
@@ -204,7 +208,7 @@ class ServerUpdater:
     def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> Tuple[bool, bool]:
         if not os.path.isdir(mod_path):
             return False, False
-        if not self._mod_needs_update(mod_id, mod_path):
+        if not self._mod_needs_update(mod_id, mod_path) and self._repair is None:
             return True, False
         shutil.rmtree(mod_path)
         return True, True
@@ -259,7 +263,7 @@ class ServerUpdater:
     @staticmethod
     def _quit() -> None:
         print("\nClosing Program now\n")
-        sys.exit()
+        exit()
 
     def _default(self) -> None:
         options = self._get_options_to_print()
@@ -281,15 +285,23 @@ class ServerUpdater:
             server_id=REFORGER_SERVER_ID,
         )
 
-    def _get_mods(
-        self, mods_list_name: Optional[str] = None
-    ) -> Optional[Dict[str, str]]:
+    def _get_mods(self) -> Optional[Dict[str, str]]:
         if self._server == Server.REFORGER:
             return None
-        if mods_list_name is None:
-            mods_list_name = A3_MOD_DEFAULT
+        if self._mods_list_name is None:
+            self._mods_list_name = A3_MOD_DEFAULT
 
-        file_name = f"{A3_MODS_LIST_PATH}/{mods_list_name}.json"
+        file_name = f"{A3_MODS_LIST_PATH}/{self._mods_list_name}.json"
 
         with open(file_name, "r") as file:
             return json.load(file)
+
+    def _get_mods_to_update(self) -> Optional[Dict[str, str]]:
+        mods = self._get_mods()
+        if self._repair is None:
+            return mods
+        try:
+            return {self._repair: mods[self._repair]}
+        except KeyError:
+            print(f"Mod {self._repair} does not exist in the list {self._mods_list_name}.")
+            exit()
