@@ -24,15 +24,33 @@ Options:
 - F: Copy key files
 
 IMPORTANT: When executing the menus referring to MODs, 
-only the file that is defined in the A3_MOD_DEFAULT constant of the config.py file is processed.
+only the file that is defined in the A3_MOD_DEFAULT constant of the `config.py` file is processed.
 
 To install or update another list of MODs you must use the following command:
 ```bash
 python3 app_start.py --option b --mod xxxx
 ```
 
-The xxxx file name must be placed without the .json extension. 
+The `xxxx` file name must be placed without the .json extension. 
 The file must have been previously created.
+
+### Force installation of a mod.
+
+Install a mod defined in the default list of `config.py`:
+```bash
+sudo -iu steam
+cd /home/steam/scripts/arga-server-updater
+python3 app_start.py --repair mod_name
+```
+
+Install a mod defined in any MODs list:
+```bash
+sudo -iu steam
+cd /home/steam/scripts/arga-server-updater
+python3 app_start.py --repair mod_name --mod xxxx
+```
+`mod_name` is the name of the MOD to be reinstalled, as written in the corresponding mod list.
+The `xxxx` file name must be placed without the .json extension.
 
 ----
 ## Reforger
