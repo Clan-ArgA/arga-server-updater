@@ -303,5 +303,7 @@ class ServerUpdater:
         try:
             return {self._repair: mods[self._repair]}
         except KeyError:
-            print(f"Mod {self._repair} does not exist in the list {self._mods_list_name}.")
+            print(
+                f"Mod {self._repair} does not exist in the list {self._mods_list_name}."
+            )
             exit()

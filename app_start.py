@@ -8,14 +8,17 @@ from server_updater.steamcmd import SteamCmd
 
 
 def select_run_mode(
-    server: Server, option: Optional[str] = None, mods_list_name: Optional[str] = None, repair: Optional[str] = None
+    server: Server,
+    option: Optional[str] = None,
+    mods_list_name: Optional[str] = None,
+    repair: Optional[str] = None,
 ) -> None:
     server_updater = ServerUpdater(
         logger=Log(),
         steamcmd=SteamCmd(server=server),
         server=server,
         mods_list_name=mods_list_name,
-        repair=repair
+        repair=repair,
     )
     if repair is not None:
         return server_updater.repair_arma3_mod()
@@ -70,7 +73,9 @@ def main() -> None:
     args = parser.parse_args()
     server = get_server_map()[args.server]
     mods_list = args.mods if server == Server.A3 else None
-    select_run_mode(server=server, option=args.option, mods_list_name=mods_list)
+    select_run_mode(
+        server=server, option=args.option, mods_list_name=mods_list, repair=args.repair
+    )
 
 
 if __name__ == "__main__":
