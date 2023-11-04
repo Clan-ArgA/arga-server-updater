@@ -1,8 +1,6 @@
 import os
-import sys
 from typing import Optional, Dict, Any
 
-from server_updater.dtos import ServerConfig
 from server_updater.config import (
     STEAM_CMD,
     STEAM_USER,
@@ -14,6 +12,7 @@ from server_updater.config import (
     REFORGER_SERVER_DIR,
 )
 from server_updater.constants import UpdateType, Server
+from server_updater.dtos import ServerConfig
 
 
 class SteamCmd:
@@ -41,7 +40,7 @@ class SteamCmd:
     @staticmethod
     def _error_type(mod_id: Optional[int] = None) -> str:
         print("ERROR: update_type name is incorrect")
-        sys.exit()
+        exit()
 
     def _get_params(self) -> Dict[UpdateType, Any]:
         return {
