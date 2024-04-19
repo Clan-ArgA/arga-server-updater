@@ -28,10 +28,10 @@ only the file that is defined in the A3_MOD_DEFAULT constant of the `config.py` 
 
 To install or update another list of MODs you must use the following command:
 ```bash
-python3 app_start.py --option b --mod xxxx
+python3 app_start.py --option b --mod [MOD_LIST_JSON_FILE]
 ```
 
-The `xxxx` file name must be placed without the .json extension. 
+The `MOD_LIST_JSON_FILE` file name must be placed without the .json extension. 
 The file must have been previously created.
 
 ### Force installation of a mod.
