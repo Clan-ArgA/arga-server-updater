@@ -70,10 +70,11 @@ class ServerUpdater:
         }
         server_name = server_name_map[self._server]
         command = f"pkill -fe '{server_name}'"
+        msg = f"Stop all {server_name} process running"
 
-        self._logger.log(f"Stop all {server_name} process\n")
+        self._logger.log(msg=msg)
         os.system(command)
-        print()
+        print(f"{'':=<{len(msg)}}")
 
     def _input(self) -> str:
         return input(self._get_input_choices())
