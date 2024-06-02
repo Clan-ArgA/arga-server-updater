@@ -137,6 +137,12 @@ python3 /home/steam/scripts/arga-server-updater/app_start.py --option b --mods x
 ```
 
 ----
+To kill Arma 3
+```bash
+pkill -f "arma"
+```
+
+----
 ## Install Reforger
 Configure the reforger server
 ```bash
