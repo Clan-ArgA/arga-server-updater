@@ -55,6 +55,8 @@ class ServerUpdater:
                 self._default()
 
     def run_choice(self, selected: str) -> None:
+        if selected.lower() != "q":
+            self.kill()
         choices = self._get_choices()
         choices[self._server][selected.lower()]()
 
