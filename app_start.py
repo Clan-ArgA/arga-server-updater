@@ -20,6 +20,7 @@ def select_run_mode(
         mods_list_name=mods_list_name,
         repair=repair,
     )
+    server_updater.kill()
     if repair is not None:
         return server_updater.repair_arma3_mod()
     if option is not None:

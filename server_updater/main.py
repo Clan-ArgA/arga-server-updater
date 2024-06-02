@@ -61,6 +61,20 @@ class ServerUpdater:
     def repair_arma3_mod(self):
         self._update_mods_only()
 
+    def kill(self):
+        """Kill all server process."""
+
+        server_name_map = {
+            Server.A3: "arma3server_x64",
+            Server.REFORGER: "reforger",
+        }
+        server_name = server_name_map[self._server]
+        command = f"pkill -fe '{server_name}'"
+
+        self._logger.log(f"Stop all {server_name} process\n")
+        os.system(command)
+        print()
+
     def _input(self) -> str:
         return input(self._get_input_choices())
 
