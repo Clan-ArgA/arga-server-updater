@@ -45,6 +45,11 @@ class TestParserOption(unittest.TestCase):
         actual = parser_option(args)
         self.assertEqual(expected, actual.option)
 
+    def test_multiple_bad_options(self):
+        args = self.create_args(["a", "b"])
+        with self.assertRaises(ArgumentTypeError):
+            parser_option(args)
+
     def test_invalid_option(self):
         expected = "invalid"
         args = self.create_args(["invalid"])
