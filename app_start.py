@@ -1,5 +1,4 @@
-import argparse
-from typing import Dict, Optional
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 
 from server_updater.constants import Server
 from server_updater.log import Log
@@ -9,9 +8,9 @@ from server_updater.steamcmd import SteamCmd
 
 def select_run_mode(
     server: Server,
-    option: Optional[str] = None,
-    mods_list_name: Optional[str] = None,
-    repair: Optional[str] = None,
+    option: str | None = None,
+    mods_list_name: str | None = None,
+    repair: str | None = None,
 ) -> None:
     server_updater = ServerUpdater(
         logger=Log(),
@@ -34,10 +33,8 @@ def run_by_command(option: str, server_updater: ServerUpdater) -> None:
         print(f"\n'{option}' is an invalid option.")
 
 
-def get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Run by command or by menu", add_help=True
-    )
+def get_parser() -> ArgumentParser:
+    parser = ArgumentParser(description="Run by command or by menu", add_help=True)
     parser.add_argument(
         "--server",
         default="arma3",
@@ -51,6 +48,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--option",
+        nargs="+",
         default=None,
         help="To run an option directly",
     )
@@ -61,16 +59,46 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def get_server_map() -> Dict[str, Server]:
+def get_server_map() -> dict[str, Server]:
     return {
         "arma3": Server.A3,
         "reforger": Server.REFORGER,
     }
 
 
+def sanitize_option(args: Namespace) -> Namespace:
+    if len(args.option) > 1:
+        raise ArgumentTypeError(f"'{args.option}' is an invalid option.")
+
+    args.option = args.option[0]
+    return args
+
+
+def parser_option(args: Namespace) -> Namespace:
+    options = args.option
+    if not options:
+        return args
+
+    options_set = {opt.lower() for opt in options}
+    if "server" in options_set and any(opt in options_set for opt in {"mods", "mod"}):
+        args.option = "a"
+        return args
+
+    if "server" in options_set:
+        args.option = "c"
+        return args
+
+    if any(opt in options_set for opt in {"mods", "mod"}):
+        args.option = "b"
+        return args
+
+    return sanitize_option(args)
+
+
 def main() -> None:
     parser = get_parser()
     args = parser.parse_args()
+    args = parser_option(args)
     server = get_server_map()[args.server]
     mods_list = args.mods if server == Server.A3 else None
     select_run_mode(
