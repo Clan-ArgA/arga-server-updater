@@ -49,13 +49,13 @@ def get_parser() -> ArgumentParser:
     parser.add_argument(
         "--option",
         default=None,
-        help="To run an option directly",
+        help="To run a menu option directly",
     )
     parser.add_argument(
         "--update",
         nargs="+",
         default=None,
-        help="Use: --update server, --update mods or --update server mods",
+        help="Arma 3 updater. Use: --update server, --update mods or --update server mods",
     )
     parser.add_argument(
         "--repair",
