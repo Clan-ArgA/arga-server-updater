@@ -55,7 +55,8 @@ def get_parser() -> ArgumentParser:
         "--update",
         nargs="+",
         default=None,
-        help="To run an option directly",
+        choices=["server", "mods"],
+        help="To update Arma 3 server, Arma 3 MODs or both",
     )
     parser.add_argument(
         "--repair",
