@@ -2,17 +2,39 @@
 
 ----
 ## Arma 3
+
+### To update arma 3 server
+```bash
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
+python3 app_start.py --update server
+```
+
+### To update arma 3 predefinid MODs
+```bash
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
+python3 app_start.py --update mods
+```
+
+### To update arma 3 server and mods
+```bash
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
+python3 app_start.py --update server mods
+```
+
 ### To run updater
 ```bash
-sudo -iu steam
-cd /home/steam/scripts/arga-server-updater
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
 python3 app_start.py
 ```
 
 ### To run an option from updater
 ```bash
-sudo -iu steam
-cd /home/steam/scripts/arga-server-updater
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
 python3 app_start.py --option option
 ```
 Options:
@@ -27,6 +49,10 @@ To install or update another list of MODs you must use the following command:
 ```bash
 python3 app_start.py --option b --mod [MOD_LIST_JSON_FILE]
 ```
+or
+```bash
+python3 app_start.py --update mods --mod [MOD_LIST_JSON_FILE]
+```
 
 The `MOD_LIST_JSON_FILE` file name must be placed without the .json extension. 
 The file must have been previously created.
@@ -35,15 +61,15 @@ The file must have been previously created.
 
 Install a mod defined in the default list of `config.py`:
 ```bash
-sudo -iu steam
-cd /home/steam/scripts/arga-server-updater
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
 python3 app_start.py --repair mod_name
 ```
 
 Install a mod defined in any MODs list:
 ```bash
-sudo -iu steam
-cd /home/steam/scripts/arga-server-updater
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
 python3 app_start.py --repair mod_name --mod xxxx
 ```
 `mod_name` is the name of the MOD to be reinstalled, as written in the corresponding mod list.
@@ -53,15 +79,15 @@ The `xxxx` file name must be placed without the .json extension.
 ## Reforger
 ### To run updater
 ```bash
-sudo -iu steam
-cd /home/steam/scripts/arga-server-updater
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
 python3 app_start.py --server reforger
 ```
 
 ### To run an option from updater
 ```bash
-sudo -iu steam
-cd /home/steam/scripts/arga-server-updater
+sudo -iu arma
+cd /home/arma/scripts/arga-server-updater
 python3 app_start.py --server reforger --option option
 ```
 Options:
@@ -76,14 +102,14 @@ python3 app_start.py --server reforger --option b
 
 ----
 ## Install
-If there is a steam user
+If there is a arma user
 ```bash
-sudo -iu steam
+sudo -iu arma
 ```
 ```bash
 apt-get update && apt-get install -y --no-install-recommends --no-install-suggests git nano python3 pip
-mkdir -p /home/steam/scripts
-cd /home/steam/scripts
+mkdir -p /home/arma/scripts
+cd /home/arma/scripts
 git clone https://github.com/Clan-ArgA/arga-server-updater.git
 cd arga-server-updater
 pip install --no-cache-dir -r requirements.txt
@@ -97,12 +123,12 @@ run this command: `apt-get install --reinstall ca-certificates`
 
 Replace the steam username and password in the prepare_server.sh file
 ```bash
-nano /home/steam/scripts/arga-server-updater/server_updater/install_tools/prepare_server.sh
+nano /home/arma/scripts/arga-server-updater/server_updater/install_tools/prepare_server.sh
 ```
 
 Prepare the server
 ```bash
-bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/prepare_server.sh
+bash /home/arma/scripts/arga-server-updater/server_updater/install_tools/prepare_server.sh
 ```
 
 ----
@@ -110,7 +136,7 @@ bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/prepar
 Create at least one file with the list of MODs that will be used on the server. 
 The file name must be xxxx.json. There must exist a file with the name xxxx defined in A3_MOD_DEFAULT.
 ```bash
-nano /home/steam/scripts/arga-server-updater/server_updater/arma3_mods_list/xxxx.json
+nano /home/arma/scripts/arga-server-updater/server_updater/arma3_mods_list/xxxx.json
 ```
 Format:
 ```json
@@ -125,12 +151,12 @@ The last line should not have a comma at the end.
 
 Install server and default list MODs.
 ```bash
-python3 /home/steam/scripts/arga-server-updater/app_start.py --option a
+python3 /home/arma/scripts/arga-server-updater/app_start.py --option a
 ```
 
 Install a specific list MODs only.
 ```bash
-python3 /home/steam/scripts/arga-server-updater/app_start.py --option b --mods xxxx
+python3 /home/arma/scripts/arga-server-updater/app_start.py --option b --mods xxxx
 ```
 
 ----
@@ -143,17 +169,17 @@ pkill -f "arma"
 ## Install Reforger
 Configure the reforger server
 ```bash
-nano /home/steam/scripts/arga-server-updater/server_updater/reforger_server_config.json
+nano /home/arma/scripts/arga-server-updater/server_updater/reforger_server_config.json
 ```
 
 Install the server
 ```bash
-python3 /home/steam/scripts/arga-server-updater/app_start.py --server reforger --option c
+python3 /home/arma/scripts/arga-server-updater/app_start.py --server reforger --option c
 ```
 
 Copy the reforger server config
 ```bash
-bash /home/steam/scripts/arga-server-updater/server_updater/install_tools/copy_reforger_config.sh
+bash /home/arma/scripts/arga-server-updater/server_updater/install_tools/copy_reforger_config.sh
 ```
 
 ----

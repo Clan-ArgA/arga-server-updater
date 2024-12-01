@@ -6,8 +6,8 @@ from app_start import parser_option
 
 
 class TestParserOption(unittest.TestCase):
-    def create_args(self, option: Optional[List[str]]) -> Namespace:
-        return Namespace(server='arma3', mods='arga', option=option, repair=None)
+    def create_args(self, update: Optional[List[str]]) -> Namespace:
+        return Namespace(server='arma3', mods='arga', update=update, repair=None)
 
     def test_server_option(self):
         expected = "c"
@@ -51,13 +51,12 @@ class TestParserOption(unittest.TestCase):
             parser_option(args)
 
     def test_invalid_option(self):
-        expected = "invalid"
         args = self.create_args(["invalid"])
-        actual = parser_option(args)
-        self.assertEqual(expected, actual.option)
+        with self.assertRaises(ArgumentTypeError):
+            parser_option(args)
 
     def test_no_options(self):
-        expected = Namespace(server='arma3', mods='arga', option=None, repair=None)
+        expected = Namespace(server='arma3', mods='arga', update=None, repair=None)
         args = self.create_args(None)
         actual = parser_option(args)
         self.assertEqual(expected, actual)

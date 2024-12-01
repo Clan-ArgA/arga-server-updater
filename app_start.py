@@ -48,6 +48,11 @@ def get_parser() -> ArgumentParser:
     )
     parser.add_argument(
         "--option",
+        default=None,
+        help="To run an option directly",
+    )
+    parser.add_argument(
+        "--update",
         nargs="+",
         default=None,
         help="To run an option directly",
@@ -66,33 +71,25 @@ def get_server_map() -> dict[str, Server]:
     }
 
 
-def sanitize_option(args: Namespace) -> Namespace:
-    if len(args.option) > 1:
-        raise ArgumentTypeError(f"'{args.option}' is an invalid option.")
-
-    args.option = args.option[0]
-    return args
-
-
 def parser_option(args: Namespace) -> Namespace:
-    options = args.option
-    if not options:
+    update = args.update
+    if not update:
         return args
 
-    options_set = {opt.lower() for opt in options}
-    if "server" in options_set and any(opt in options_set for opt in {"mods", "mod"}):
+    update_set = {opt.lower() for opt in update}
+    if "server" in update_set and any(opt in update_set for opt in {"mods", "mod"}):
         args.option = "a"
         return args
 
-    if "server" in options_set:
+    if "server" in update_set:
         args.option = "c"
         return args
 
-    if any(opt in options_set for opt in {"mods", "mod"}):
+    if any(opt in update_set for opt in {"mods", "mod"}):
         args.option = "b"
         return args
 
-    return sanitize_option(args)
+    raise ArgumentTypeError(f"'{args.update}' is an invalid option.")
 
 
 def main() -> None:
