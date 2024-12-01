@@ -3,7 +3,7 @@ import os
 import shutil
 import time
 from datetime import datetime
-from typing import Dict, Any, Optional, Tuple
+from typing import Any
 from urllib import request
 
 from server_updater.config import (
@@ -36,8 +36,8 @@ class ServerUpdater:
         logger: Log,
         steamcmd: SteamCmd,
         server: Server,
-        mods_list_name: Optional[str] = None,
-        repair: Optional[str] = None,
+        mods_list_name: str | None = None,
+        repair: str | None = None,
     ):
         self._logger = logger
         self._steamcmd = steamcmd
@@ -99,7 +99,7 @@ class ServerUpdater:
         }
         return input_map[self._server]
 
-    def _get_choices(self) -> Dict[Server, Dict[str, Any]]:
+    def _get_choices(self) -> dict[Server, dict[str, Any]]:
         return {
             Server.A3: {
                 "a": self._update_server_and_mods,
@@ -136,7 +136,7 @@ class ServerUpdater:
         )
         self._steamcmd.run(update_type=UpdateType.SERVER)
 
-    def _create_mod_symlinks(self, updated_mods: Dict[str, str]) -> None:
+    def _create_mod_symlinks(self, updated_mods: dict[str, str]) -> None:
         self._logger.log("Creating symlinks...")
         for mod_name, mod_id in updated_mods.items():
             link_path = f"{A3_MODS_DIR}/{mod_name}"
@@ -151,7 +151,7 @@ class ServerUpdater:
             print(f"Creating symlink '{link_path}'...")
         print()
 
-    def _lower_case_mods(self, updated_mods: Dict[str, str]) -> None:
+    def _lower_case_mods(self, updated_mods: dict[str, str]) -> None:
         self._logger.log("Converting uppercase files/folders to lowercase...")
         for value in updated_mods.values():
             directory_path = f"{A3_WORKSHOP_DIR}/{value}"
@@ -181,8 +181,8 @@ class ServerUpdater:
         return updated_at >= created_at
 
     def _update_mods(
-        self, mods_to_update: Dict[str, str], time_sleep: Optional[int] = 5
-    ) -> Optional[Dict[str, str]]:
+        self, mods_to_update: dict[str, str], time_sleep: int | None = 5
+    ) -> dict[str, str] | None:
         updated_mods = {}
         for mod_name, mod_id in mods_to_update.items():
             mod_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
@@ -217,7 +217,7 @@ class ServerUpdater:
             return False
         return True
 
-    def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> Tuple[bool, bool]:
+    def _delete_mod_if_needed(self, mod_id: str, mod_path: str) -> tuple[bool, bool]:
         if not os.path.isdir(mod_path):
             return False, False
         if not self._mod_needs_update(mod_id, mod_path) and self._repair is None:
@@ -225,7 +225,7 @@ class ServerUpdater:
         shutil.rmtree(mod_path)
         return True, True
 
-    def _copy_key_files(self, updated_mods: Dict[str, str]) -> None:
+    def _copy_key_files(self, updated_mods: dict[str, str]) -> None:
         """Copy the Mods sign files."""
         self._logger.log("Start copy of Mods sign key files...")
         was_copied = False
@@ -297,7 +297,7 @@ class ServerUpdater:
             server_id=REFORGER_SERVER_ID,
         )
 
-    def _get_mods(self) -> Optional[Dict[str, str]]:
+    def _get_mods(self) -> dict[str, str] | None:
         if self._server == Server.REFORGER:
             return None
         if self._mods_list_name is None:
@@ -308,7 +308,7 @@ class ServerUpdater:
         with open(file_name, "r") as file:
             return json.load(file)
 
-    def _get_mods_to_update(self) -> Optional[Dict[str, str]]:
+    def _get_mods_to_update(self) -> dict[str, str] | None:
         mods = self._get_mods()
         if self._repair is None:
             return mods
