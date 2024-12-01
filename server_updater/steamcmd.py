@@ -21,9 +21,12 @@ class SteamCmd:
         self._config = self._set_config()
 
     def run(self, update_type: UpdateType, mod_id: Optional[int] = None) -> None:
-        params = self._get_params().get(update_type, self._error_type)(mod_id)
-        os.system(f"{STEAM_CMD} {params}")
-        print("")
+        try:
+            params = self._get_params()[update_type](mod_id)
+            os.system(f"{STEAM_CMD} {params}")
+            print("")
+        except KeyError:
+            self._error_type()
 
     def _get_update_server_params(self, mod_id: Optional[int] = None) -> str:
         steam_cmd_params = self._steam_cmd_params
@@ -38,7 +41,7 @@ class SteamCmd:
         return steam_cmd_params
 
     @staticmethod
-    def _error_type(mod_id: Optional[int] = None) -> str:
+    def _error_type() -> None:
         print("ERROR: update_type name is incorrect")
         exit()
 
