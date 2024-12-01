@@ -161,3 +161,11 @@ To kill Arma Reforger
 ```bash
 pkill -f "reforger"
 ```
+
+----
+## Run coverage
+
+```bash
+py -m coverage run -m unittest discover
+py -m coverage html
+```
