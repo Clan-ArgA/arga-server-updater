@@ -10,5 +10,5 @@ class Testlog(TestCase):
         logger = Log()
         logger.log("Test log message")
         mock_print.assert_called_with(
-            "\n================\nTest log message\n================"
+            "\n================\nTest log message\n================", flush=True
         )
