@@ -87,9 +87,6 @@ class ServerUpdater:
                       A: Update server and Mods
                       B: Update Mods only
                       C: Update Server only
-                      D: Create mod symlinks
-                      E: Lower case mods
-                      F: Copy key files
                       Q: Quit/Log Out
                       Please enter your choice: """,
             Server.REFORGER: """
@@ -107,9 +104,6 @@ class ServerUpdater:
                 "a": self._update_server_and_mods,
                 "b": self._update_mods_only,
                 "c": self._update_server,
-                "d": self._create_mod_symlinks,
-                "e": self._lower_case_mods,
-                "f": self._copy_key_files,
                 "q": self._quit,
             },
             Server.REFORGER: {
