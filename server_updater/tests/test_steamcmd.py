@@ -10,14 +10,14 @@ from server_updater.steamcmd import SteamCmd
 class SteamCmdTest(TestCase):
     def setUp(self) -> None:
         self._arma3_expected = (
-            f"/home/steam/steamcmd/steamcmd.sh  "
-            f"+force_install_dir /home/steam/steamcmd/arma3 "
+            f"/home/arma/steamcmd/steamcmd.sh  "
+            f"+force_install_dir /home/arma/steamcmd/arma3 "
             f"+login {STEAM_USER} {STEAM_PASS}"
         )
 
         self._reforger_expected = (
-            f"/home/steam/steamcmd/steamcmd.sh  "
-            f"+force_install_dir /home/steam/steamcmd/reforger "
+            f"/home/arma/steamcmd/steamcmd.sh  "
+            f"+force_install_dir /home/arma/steamcmd/reforger "
             f"+login {STEAM_USER} {STEAM_PASS}"
         )
 

@@ -55,15 +55,16 @@ class ServerUpdater:
                 self._default()
 
     def run_choice(self, selected: str) -> None:
-        if selected.lower() != "q":
-            self.kill()
         choices = self._get_choices()
+        if selected.lower() != "q" and selected.lower() in choices[self._server]:
+            self._kill()
         choices[self._server][selected.lower()]()
 
     def repair_arma3_mod(self):
+        self._kill()
         self._update_mods_only()
 
-    def kill(self):
+    def _kill(self):
         """Kill all server process."""
 
         server_name_map = {

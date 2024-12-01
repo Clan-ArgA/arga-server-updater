@@ -21,10 +21,8 @@ def select_run_mode(
         repair=repair,
     )
     if repair is not None:
-        server_updater.kill()
         return server_updater.repair_arma3_mod()
     if option is not None:
-        server_updater.kill()
         return run_by_command(option, server_updater)
     server_updater.run()
 
