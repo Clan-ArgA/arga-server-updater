@@ -39,12 +39,12 @@ def get_parser() -> ArgumentParser:
         "--server",
         default="arma3",
         choices=["arma3", "reforger"],
-        help="Type of operation to perform",
+        help="Type of server to update. (default: arma3)",
     )
     parser.add_argument(
         "--mods",
         default="arga",
-        help="Specify the mods to update (default: arga)",
+        help="Specify the mods to update. (default: arga)",
     )
     parser.add_argument(
         "--option",
@@ -59,7 +59,7 @@ def get_parser() -> ArgumentParser:
     )
     parser.add_argument(
         "--repair",
-        help="Reinstall the specified mod.",
+        help="Reinstall the specified mod",
     )
     return parser
 
