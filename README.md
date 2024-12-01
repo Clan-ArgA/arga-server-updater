@@ -19,9 +19,6 @@ Options:
 - A: Update server and Mods
 - B: Update Mods only
 - C: Update Server only
-- D: Create mod symlinks
-- E: Lower case mods
-- F: Copy key files
 
 IMPORTANT: When executing the menus referring to MODs, 
 only the file that is defined in the A3_MOD_DEFAULT constant of the `config.py` file is processed.
