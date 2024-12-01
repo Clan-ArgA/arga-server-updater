@@ -75,9 +75,9 @@ class ServerUpdater:
         command = f"pkill -fe '{server_name}'"
         msg = f"Stop all {server_name} process running"
 
-        self._logger.log(msg=msg)
+        self._logger.log_title(msg=msg)
         os.system(command)
-        print(f"{'':=<{len(msg)}}")
+        self._logger.log(f"{'':=<{len(msg)}}")
 
     def _input(self) -> str:
         return input(self._get_input_choices())
@@ -123,36 +123,36 @@ class ServerUpdater:
         mods_to_update = self._get_mods_to_update()
         updated_mods = self._update_mods(mods_to_update)
         if updated_mods is None:
-            self._logger.log("All MODs are updated")
-            print()
+            self._logger.log_title("All MODs are updated")
+            self._logger.log()
             return None
         self._lower_case_mods(updated_mods)
         self._create_mod_symlinks(updated_mods)
         self._copy_key_files(updated_mods)
 
     def _update_server(self) -> None:
-        self._logger.log(
+        self._logger.log_title(
             f"Updating {self._server.value} server ({self._config.server_id})"
         )
         self._steamcmd.run(update_type=UpdateType.SERVER)
 
     def _create_mod_symlinks(self, updated_mods: dict[str, str]) -> None:
-        self._logger.log("Creating symlinks...")
+        self._logger.log_title("Creating symlinks...")
         for mod_name, mod_id in updated_mods.items():
             link_path = f"{A3_MODS_DIR}/{mod_name}"
             real_path = f"{A3_WORKSHOP_DIR}/{mod_id}"
 
             if not os.path.isdir(real_path):
-                print(f"Mod '{mod_name}' does not exist! ({real_path})")
+                self._logger.log(f"Mod '{mod_name}' does not exist! ({real_path})")
                 continue
             if os.path.islink(link_path):
                 continue
             os.symlink(real_path, link_path)
-            print(f"Creating symlink '{link_path}'...")
-        print()
+            self._logger.log(f"Creating symlink '{link_path}'...")
+        self._logger.log()
 
     def _lower_case_mods(self, updated_mods: dict[str, str]) -> None:
-        self._logger.log("Converting uppercase files/folders to lowercase...")
+        self._logger.log_title("Converting uppercase files/folders to lowercase...")
         for value in updated_mods.values():
             directory_path = f"{A3_WORKSHOP_DIR}/{value}"
             for root, dirs, files in os.walk(directory_path):
@@ -162,9 +162,9 @@ class ServerUpdater:
                         continue
                     try:
                         os.rename(os.path.join(root, filename), new_name)
-                        print(f"Renamed: {filename} -> {new_name}")
+                        self._logger.log(f"Renamed: {filename} -> {new_name}")
                     except OSError as e:
-                        print(f"Error renaming {filename}: {e}")
+                        self._logger.log(f"Error renaming {filename}: {e}")
 
     @staticmethod
     def _mod_needs_update(mod_id, path) -> bool:
@@ -190,7 +190,7 @@ class ServerUpdater:
                 mod_id=mod_id, mod_path=mod_path
             )
             if is_dir and not mod_needs_update:
-                print(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
+                self._logger.log(f'No update required for "{mod_name}" ({mod_id})... SKIPPING')
                 continue
             if self._try_to_update_mod(
                 mod_id=mod_id,
@@ -207,13 +207,13 @@ class ServerUpdater:
         tries = 0
         max_tries = 10
         while not os.path.isdir(mod_path) and tries < max_tries:
-            self._logger.log(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
+            self._logger.log_title(f'Updating "{mod_name}" ({mod_id}) | {tries + 1}')
             self._steamcmd.run(update_type=UpdateType.MOD, mod_id=int(mod_id))
             time.sleep(time_sleep)
             tries += 1
 
         if tries >= max_tries:
-            self._logger.log(f"!! Updating {mod_name} failed after {tries} tries !!")
+            self._logger.log_title(f"!! Updating {mod_name} failed after {tries} tries !!")
             return False
         return True
 
@@ -227,7 +227,7 @@ class ServerUpdater:
 
     def _copy_key_files(self, updated_mods: dict[str, str]) -> None:
         """Copy the Mods sign files."""
-        self._logger.log("Start copy of Mods sign key files...")
+        self._logger.log_title("Start copy of Mods sign key files...")
         was_copied = False
         for value in updated_mods.values():
             directory_path = f"{A3_MOD_KEYS_SOURCE_DIRECTORY}/{value}"
@@ -239,21 +239,20 @@ class ServerUpdater:
                     destination_file_path = os.path.join(
                         A3_MOD_KEYS_DESTINATION_DIRECTORY, file
                     )
-                    print(f"Copy {file} file")
+                    self._logger.log(f"Copy {file} file")
                     shutil.copy(source_file_path, destination_file_path)
                     was_copied = True
 
         if not was_copied:
-            print("There are no MODs sign key files to copy\n")
+            self._logger.log("There are no MODs sign key files to copy\n")
             return None
-        print("MODs sign key files was successfully copied.\n")
+        self._logger.log("MODs sign key files was successfully copied.\n")
 
     def _update_server_and_run_reforger(self):
         self._update_server()
         self._run_reforger_server()
 
-    @staticmethod
-    def _run_reforger_server():
+    def _run_reforger_server(self):
         # https://community.bistudio.com/wiki/Arma_Reforger:Startup_Parameters
         launch = " ".join(
             [
@@ -266,22 +265,21 @@ class ServerUpdater:
                 REFORGER_ARMA_ARMA_PARAMS,
             ]
         )
-        print(launch, flush=True)
+        self._logger.log(launch)
         try:
             os.system(f"(cd {REFORGER_SERVER_DIR} && {launch})")
         except OSError as e:
-            print(f"Error launching the Reforger server: {e}")
+            self._logger.log(f"Error launching the Reforger server: {e}")
 
-    @staticmethod
-    def _quit() -> None:
-        print("\nClosing Program now\n")
+    def _quit(self) -> None:
+        self._logger.log("\nClosing Program now\n")
         exit()
 
     def _default(self) -> None:
         options = self._get_options_to_print()
-        print()
-        print(f"You must only select either {options} to quit.")
-        print("Please try again")
+        self._logger.log()
+        self._logger.log(f"You must only select either {options} to quit.")
+        self._logger.log("Please try again")
         time.sleep(1)
 
     def _get_options_to_print(self) -> str:
@@ -315,7 +313,7 @@ class ServerUpdater:
         try:
             return {self._repair: mods[self._repair]}
         except KeyError:
-            print(
+            self._logger.log(
                 f"Mod {self._repair} does not exist in the list {self._mods_list_name}."
             )
             exit()
